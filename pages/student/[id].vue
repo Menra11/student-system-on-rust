@@ -120,7 +120,7 @@ const formatDate = (dateString: string) => {
 // 获取学生数据
 // 获取学生成绩
 const fetchStudent = async () => {
-  const { Student,Scores } = await $fetch<StudentGet>(`/api/students/${route.params.id}`,{
+  const { Student,Scores } = await $fetch<StudentGet>(`/api/student/${route.params.id}`,{
     method: 'GET'
   })
   if (student && scores) {
@@ -134,7 +134,7 @@ const goBack = () => {
 }
 // 编辑学生
 const editStudent = () => {
-  router.push(`/students/${route.params.id}/edit`)
+  router.push(`/student/${route.params.id}/edit`)
 }
 onMounted(() => {
   fetchStudent()

@@ -56,7 +56,7 @@
               <td class="py-3 px-4 border-b">{{ student.student_id }}</td>
               <td class="py-3 px-4 border-b">{{ student.student_name }}</td>
               <td class="py-3 px-4 border-b">
-                {{ student.gender === "M" ? "男" : "女" }}
+                {{ student.gender }}
               </td>
               <td class="py-3 px-4 border-b">
                 {{ formatDate(student.birth_date) }}
@@ -125,7 +125,7 @@
         </div>
       </div>
     </div>
-    <NuxtPage />
+    
   </div>
 </template>
 
@@ -260,11 +260,11 @@ const formatDate = (dateString: string) => {
 
 // 操作函数
 const viewStudent = (id: number) => {
-  navigateTo(`/students/${id}`);
+  navigateTo(`/student/${id}`);
 };
 
 const editStudent = (id: number) => {
-  navigateTo(`/students/${id}/edit`);
+  navigateTo(`/student/${id}/edit`);
 };
 
 // const deleteStudent = async (id: number) => {
