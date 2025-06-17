@@ -4,13 +4,13 @@ import type { Student, Score, StudentGet } from "~/types/student";
 export const useMyUserStore = defineStore("myUserStore", {
   state: () => ({
     user: {
-      id: "",
+      id: 0,
       name: "",
       user_type: "",
     },
   }),
   actions: {
-    async getStudentUser(id: string) {
+    async getStudentUser(id: number) {
       const { Student } = await $fetch<StudentGet>(`/api/student/${id}`, {
         method: "GET",
       });

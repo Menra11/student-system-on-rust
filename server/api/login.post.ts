@@ -1,4 +1,3 @@
-import { ErrorCodes } from "vue";
 import pool from "./db";
 
 export default defineEventHandler(async (event) => {
