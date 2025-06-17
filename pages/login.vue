@@ -107,12 +107,12 @@
 
           <!-- 底部链接 -->
           <div class="flex justify-between items-center mt-6">
-            <a
-              href="#"
-              class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-300"
+            <span
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-300 cursor-pointer"
+              @click="useRegister"
             >
               <i class="fas fa-user-plus mr-1"></i> 注册
-            </a>
+            </span>
             <a
               href="#"
               class="text-gray-500 hover:text-gray-700 text-sm transition-colors duration-300"
@@ -131,12 +131,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { loginData,LoginResponse } from "~/types/login";
+import type { loginData, LoginResponse } from "~/types/login";
 const router = useRouter();
 
 // 收集输入的账户密码
 let loginData = reactive<loginData>({
-  user_id: "2020001",
+  user_id: 2020001,
   password: "123456",
   user: "student",
 });
@@ -147,9 +147,9 @@ const errorMessage = ref("");
 // 登录的回调
 let useLogin = async () => {
   errorMessage.value = "";
-  if (!validateForm()) return
+  if (!validateForm()) return;
   try {
-    isLoading.value = true
+    isLoading.value = true;
     const response = await $fetch<LoginResponse>("/api/login", {
       method: "POST",
       params: {
@@ -159,7 +159,7 @@ let useLogin = async () => {
       },
     });
     console.log(response);
-    
+
     if (response.success) {
       // 登录成功，跳转主界面
       if (loginData.user === "student") {
@@ -175,7 +175,7 @@ let useLogin = async () => {
     }
   } catch (error) {
     console.log(error);
-    
+
     handleLoginError(error);
   } finally {
     // 重置加载状态
@@ -183,67 +183,67 @@ let useLogin = async () => {
   }
 };
 const validateForm = (): boolean => {
-  if (!loginData.user_id.trim()) {
-    errorMessage.value = "用户ID不能为空"
-    return false
+  if (!loginData.user_id.toString().trim()) {
+    errorMessage.value = "用户ID不能为空";
+    return false;
   }
-  
+
   if (!loginData.password) {
-    errorMessage.value = "密码不能为空"
-    return false
+    errorMessage.value = "密码不能为空";
+    return false;
   }
-  
+
   if (loginData.password.length < 4) {
-    errorMessage.value = "密码长度至少为4位"
-    return false
+    errorMessage.value = "密码长度至少为4位";
+    return false;
   }
-  
-  return true
-}
+
+  return true;
+};
 const handleLoginError = (response: LoginResponse) => {
   // 根据后端返回的错误码显示不同的错误信息
   switch (response.errorCode) {
-    case 'INVALID_CREDENTIALS':
-      errorMessage.value = "用户名或密码错误"
-      break
-    case 'ACCOUNT_LOCKED':
-      errorMessage.value = "账户已被锁定，请联系管理员"
-      break
-    case 'USER_NOT_FOUND':
-      errorMessage.value = "用户不存在"
-      break
-    case 'INSUFFICIENT_PERMISSION':
-      errorMessage.value = "您没有权限登录此系统"
-      break
+    case "INVALID_CREDENTIALS":
+      errorMessage.value = "用户名或密码错误";
+      break;
+    case "ACCOUNT_LOCKED":
+      errorMessage.value = "账户已被锁定，请联系管理员";
+      break;
+    case "USER_NOT_FOUND":
+      errorMessage.value = "用户不存在";
+      break;
+    case "INSUFFICIENT_PERMISSION":
+      errorMessage.value = "您没有权限登录此系统";
+      break;
     default:
-      errorMessage.value = response.message || "登录失败，请稍后再试"
+      errorMessage.value = response.message || "登录失败，请稍后再试";
   }
-}
+};
 const handleNetworkError = (error: any) => {
   if (error.response) {
     // 服务器返回了错误状态码
-    const status = error.response.status
+    const status = error.response.status;
     switch (status) {
       case 401:
-        errorMessage.value = "身份验证失败"
-        break
+        errorMessage.value = "身份验证失败";
+        break;
       case 403:
-        errorMessage.value = "访问被拒绝"
-        break
+        errorMessage.value = "访问被拒绝";
+        break;
       case 500:
-        errorMessage.value = "服务器内部错误"
-        break
+        errorMessage.value = "服务器内部错误";
+        break;
       default:
-        errorMessage.value = `请求失败: ${status}`
+        errorMessage.value = `请求失败: ${status}`;
     }
   } else if (error.request) {
     // 请求已发送但无响应
-    errorMessage.value = "无法连接到服务器，请检查网络连接"
+    errorMessage.value = "无法连接到服务器，请检查网络连接";
   } else {
     // 其他错误
-    errorMessage.value = "发生未知错误: " + error.message
+    errorMessage.value = "发生未知错误: " + error.message;
   }
-}
+};
 let useRegister = () => {
   router.push("/register");
 };
