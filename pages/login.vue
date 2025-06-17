@@ -162,7 +162,13 @@ let useLogin = async () => {
     
     if (response.success) {
       // 登录成功，跳转主界面
-      router.push("/students");
+      if (loginData.user === "student") {
+        router.push(`/student/${loginData.user_id}`);
+      } else if (loginData.user === "teacher") {
+        // router.push("/teacher");
+      } else if (loginData.user === "admin") {
+        router.push("/students");
+      }
     } else {
       // 处理登录失败
       handleLoginError(response);
