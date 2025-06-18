@@ -254,8 +254,17 @@ let useLogin = async () => {
     console.log(response);
 
     if (response.success) {
-      // 登录成功，跳转主界面
+      userStore.setToken(response.token);
       await userStore.getStudentUser(loginData.user_id);
+      if (import.meta.server) {
+        // 设置cookie，有效期与token相同
+        document.cookie = `token=${response.token}; path=/; max-age=${
+          60 * 60 * 24
+        }`; // 1天
+      }
+      if (import.meta.client) {
+        localStorage.setItem("token", response.token);
+      }
       if (loginData.user === "student") {
         router.push(`/student/${loginData.user_id}`);
       } else if (loginData.user === "teacher") {
