@@ -18,6 +18,20 @@ import {
   faUserGraduate,
   faChalkboardTeacher,
   faUserShield,
+  faIdCard,
+  faHashtag,
+  faSignature,
+  faKey,
+  faVenusMars,
+  faMars,
+  faVenus,
+  faCalendarDays,
+  faCalendar,
+  faBuildingColumns,
+  faPhone,
+  faMobileScreen,
+  faEnvelope,
+  faAt,
 } from "@fortawesome/free-solid-svg-icons";
 
 // 防止自动添加CSS
@@ -40,7 +54,21 @@ library.add(
   faLock,
   faUserGraduate,
   faChalkboardTeacher,
-  faUserShield
+  faUserShield,
+  faIdCard,
+  faHashtag,
+  faSignature,
+  faKey,
+  faVenusMars,
+  faMars,
+  faVenus,
+  faCalendarDays,
+  faCalendar,
+  faBuildingColumns,
+  faPhone,
+  faMobileScreen,
+  faEnvelope,
+  faAt,
 );
 
 export default defineNuxtPlugin((nuxtApp) => {

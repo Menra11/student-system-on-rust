@@ -4,7 +4,10 @@
       <div class="bg-white rounded-2xl shadow-blue overflow-hidden">
         <!-- 头部装饰 -->
         <div class="bg-blue-700 py-6 text-center">
-          <h1 class="text-2xl font-bold text-white">用户注册</h1>
+          <h1 class="text-2xl font-bold text-white">
+            <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />
+            用户注册
+          </h1>
         </div>
 
         <!-- 注册表单 -->
@@ -15,7 +18,7 @@
             class="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg"
           >
             <div class="flex items-center">
-              <i class="fas fa-exclamation-circle mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
               <span>{{ errorMessage }}</span>
             </div>
           </div>
@@ -26,15 +29,21 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="student_id"
             >
+              <font-awesome-icon :icon="['fas', 'id-card']" class="mr-1" />
               学号
             </label>
-            <input
-              id="student_id"
-              type="number"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
-              placeholder="请输入学号"
-              v-model.number="registerData.student_id"
-            />
+            <div class="relative">
+              <input
+                id="student_id"
+                type="number"
+                class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
+                placeholder="请输入学号"
+                v-model.number="registerData.student_id"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <font-awesome-icon :icon="['fas', 'hashtag']" />
+              </div>
+            </div>
           </div>
 
           <!-- 姓名 -->
@@ -43,36 +52,50 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="student_name"
             >
+              <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />
               姓名
             </label>
-            <input
-              id="student_name"
-              type="text"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
-              placeholder="请输入真实姓名"
-              v-model="registerData.student_name"
-            />
+            <div class="relative">
+              <input
+                id="student_name"
+                type="text"
+                class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
+                placeholder="请输入真实姓名"
+                v-model="registerData.student_name"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <font-awesome-icon :icon="['fas', 'signature']" />
+              </div>
+            </div>
           </div>
+          
           <!-- 密码 -->
           <div class="mb-4">
             <label
               class="block text-gray-700 text-sm font-medium mb-2"
               for="password"
             >
+              <font-awesome-icon :icon="['fas', 'lock']" class="mr-1" />
               注册密码
             </label>
-            <input
-              id="password"
-              type="password"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
-              placeholder="请输入注册密码"
-              v-model="registerData.password"
-            />
+            <div class="relative">
+              <input
+                id="password"
+                type="password"
+                class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
+                placeholder="请输入注册密码"
+                v-model="registerData.password"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <font-awesome-icon :icon="['fas', 'key']" />
+              </div>
+            </div>
           </div>
 
           <!-- 性别 -->
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-medium mb-2">
+              <font-awesome-icon :icon="['fas', 'venus-mars']" class="mr-1" />
               性别
             </label>
             <div class="flex space-x-4">
@@ -84,6 +107,7 @@
                   v-model="registerData.gender"
                   class="mr-2 h-4 w-4 text-blue-600"
                 />
+                <font-awesome-icon :icon="['fas', 'mars']" class="mr-1 text-blue-500" />
                 <span>男</span>
               </label>
               <label class="flex items-center">
@@ -94,6 +118,7 @@
                   v-model="registerData.gender"
                   class="mr-2 h-4 w-4 text-blue-600"
                 />
+                <font-awesome-icon :icon="['fas', 'venus']" class="mr-1 text-pink-500" />
                 <span>女</span>
               </label>
             </div>
@@ -105,14 +130,20 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="birth_date"
             >
+              <font-awesome-icon :icon="['fas', 'calendar-days']" class="mr-1" />
               出生日期
             </label>
-            <input
-              id="birth_date"
-              type="date"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
-              v-model="registerData.birth_date"
-            />
+            <div class="relative">
+              <input
+                id="birth_date"
+                type="date"
+                class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
+                v-model="registerData.birth_date"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <font-awesome-icon :icon="['fas', 'calendar']" />
+              </div>
+            </div>
           </div>
 
           <!-- 班级选择 -->
@@ -121,13 +152,14 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="class_name"
             >
+              <font-awesome-icon :icon="['fas', 'graduation-cap']" class="mr-1" />
               选择班级
             </label>
             <div class="relative">
               <select
                 id="class_name"
                 v-model="registerData.class_name"
-                class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300 appearance-none bg-white"
+                class="w-full px-4 py-3 pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300 appearance-none bg-white"
               >
                 <option value="">请选择</option>
                 <option value="计算机科学与技术1班">计算机科学与技术1班</option>
@@ -137,9 +169,14 @@
                 <option value="人工智能1班">人工智能1班</option>
               </select>
               <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"
+              >
+                <font-awesome-icon :icon="['fas', 'building-columns']" />
+              </div>
+              <div
                 class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
               >
-                <i class="fas fa-chevron-down"></i>
+                <font-awesome-icon :icon="['fas', 'chevron-down']" />
               </div>
             </div>
           </div>
@@ -150,15 +187,21 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="phone"
             >
+              <font-awesome-icon :icon="['fas', 'phone']" class="mr-1" />
               联系电话
             </label>
-            <input
-              id="phone"
-              type="tel"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
-              placeholder="请输入手机号码"
-              v-model="registerData.phone"
-            />
+            <div class="relative">
+              <input
+                id="phone"
+                type="tel"
+                class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
+                placeholder="请输入手机号码"
+                v-model="registerData.phone"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <font-awesome-icon :icon="['fas', 'mobile-screen']" />
+              </div>
+            </div>
           </div>
 
           <!-- 邮箱 -->
@@ -167,27 +210,34 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="email"
             >
+              <font-awesome-icon :icon="['fas', 'envelope']" class="mr-1" />
               电子邮箱
             </label>
-            <input
-              id="email"
-              type="email"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
-              placeholder="请输入常用邮箱"
-              v-model="registerData.email"
-            />
+            <div class="relative">
+              <input
+                id="email"
+                type="email"
+                class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
+                placeholder="请输入常用邮箱"
+                v-model="registerData.email"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <font-awesome-icon :icon="['fas', 'at']" />
+              </div>
+            </div>
           </div>
 
           <!-- 注册按钮 -->
           <button
             type="submit"
-            class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center"
           >
-            <span v-if="!isLoading">注册账号</span>
+            <span v-if="!isLoading" class="flex items-center">
+              <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />
+              注册账号
+            </span>
             <span v-else class="flex items-center">
-              <span class="animate-spin mr-2">
-                <i class="fas fa-spinner"></i>
-              </span>
+              <font-awesome-icon :icon="['fas', 'spinner']" class="animate-spin mr-2" />
               注册中...
             </span>
           </button>
@@ -195,10 +245,11 @@
           <!-- 底部链接 -->
           <div class="flex justify-center items-center mt-6">
             <span
-              class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-300 cursor-pointer"
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-300 cursor-pointer flex items-center"
               @click="goToLogin"
             >
-              <i class="fas fa-sign-in-alt mr-1"></i> 返回登录
+              <font-awesome-icon :icon="['fas', 'sign-in-alt']" class="mr-1" />
+              返回登录
             </span>
           </div>
         </form>
@@ -275,6 +326,11 @@ const validateForm = (): boolean => {
     errorMessage.value = "请输入姓名";
     return false;
   }
+  
+  if (!registerData.password || registerData.password.length < 6) {
+    errorMessage.value = "密码长度至少为6位";
+    return false;
+  }
 
   if (!registerData.gender) {
     errorMessage.value = "请选择性别";
@@ -317,32 +373,7 @@ const goToLogin = () => {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
-
-/* 日期选择器样式适配 */
-input[type="date"] {
-  appearance: none;
-  -webkit-appearance: none;
-  background-color: white;
-  padding: 0.75rem 1rem;
-  font-family: inherit;
-}
-
-/* 下拉选择框自定义样式 */
-select {
-  background-image: none;
-  background-position: right 0.75rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  padding-right: 2.5rem;
-  cursor: pointer;
-}
-
-select:focus {
-  outline: none;
-}
-
-/* 下拉箭头图标样式 */
-.fa-chevron-down {
-  font-size: 0.875rem;
+.shadow-blue {
+  box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2), 0 2px 4px -1px rgba(30, 64, 175, 0.06);
 }
 </style>
