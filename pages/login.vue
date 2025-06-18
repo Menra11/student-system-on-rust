@@ -15,7 +15,10 @@
             class="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg"
           >
             <div class="flex items-center">
-              <i class="fas fa-exclamation-circle mr-2"></i>
+              <font-awesome-icon
+                :icon="['fas', 'exclamation-circle']"
+                class="mr-2"
+              />
               <span>{{ errorMessage }}</span>
             </div>
           </div>
@@ -35,6 +38,11 @@
                 placeholder="请输入您的ID"
                 v-model="loginData.user_id"
               />
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
+                <font-awesome-icon :icon="['fas', 'user']" />
+              </div>
             </div>
           </div>
 
@@ -54,6 +62,11 @@
                 placeholder="请输入您的密码"
                 v-model="loginData.password"
               />
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
+                <font-awesome-icon :icon="['fas', 'lock']" />
+              </div>
             </div>
           </div>
 
@@ -66,6 +79,10 @@
                 id="学生"
                 value="student"
                 v-model="loginData.user"
+              />
+              <font-awesome-icon
+                :icon="['fas', 'user-graduate']"
+                class="mr-1 text-blue-600"
               />学生</label
             >
             <label for="教师"
@@ -76,6 +93,9 @@
                 class="ml-6"
                 value="teacher"
                 v-model="loginData.user"
+              /><font-awesome-icon
+                :icon="['fas', 'chalkboard-teacher']"
+                class="mr-1 text-blue-600"
               />教师</label
             >
             <label for="管理员"
@@ -86,7 +106,12 @@
                 class="ml-6"
                 value="admin"
                 v-model="loginData.user"
-              />管理员</label
+              />
+              <font-awesome-icon
+                :icon="['fas', 'user-shield']"
+                class="mr-1 text-blue-600"
+              />
+              管理员</label
             >
           </div>
 
@@ -96,11 +121,9 @@
             class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             @click="useLogin"
           >
-            <span v-if="!isLoading">登录</span>
+            <span v-if="!isLoading"><font-awesome-icon :icon="['fas', 'sign-in-alt']" class="mr-2" />登录</span>
             <span v-else class="flex items-center">
-              <span class="animate-spin mr-2">
-                <i class="fas fa-spinner"></i>
-              </span>
+              <font-awesome-icon :icon="['fas', 'spinner']" class="animate-spin mr-2" />
               登录中...
             </span>
           </button>
@@ -111,13 +134,13 @@
               class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-300 cursor-pointer"
               @click="useRegister"
             >
-              <i class="fas fa-user-plus mr-1"></i> 注册
+              <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-1" /> 注册
             </span>
             <a
               href="#"
               class="text-gray-500 hover:text-gray-700 text-sm transition-colors duration-300"
             >
-              <i class="fas fa-question-circle mr-1"></i> <del>忘记密码？</del>
+               <font-awesome-icon :icon="['fas', 'question-circle']" class="mr-1" /> <del>忘记密码？</del>
             </a>
           </div>
         </form>
@@ -132,7 +155,7 @@
 
 <script lang="ts" setup>
 import type { loginData, LoginResponse } from "@/types/login";
-import {useMyUserStore } from "@/stores/user";
+import { useMyUserStore } from "@/stores/user";
 const router = useRouter();
 const userStore = useMyUserStore();
 // 收集输入的账户密码
@@ -163,7 +186,7 @@ let useLogin = async () => {
 
     if (response.success) {
       // 登录成功，跳转主界面
-      await userStore.getStudentUser(loginData.user_id)
+      await userStore.getStudentUser(loginData.user_id);
       if (loginData.user === "student") {
         router.push(`/student/${loginData.user_id}`);
       } else if (loginData.user === "teacher") {
@@ -171,7 +194,6 @@ let useLogin = async () => {
       } else if (loginData.user === "admin") {
         router.push("/students");
       }
-      
     } else {
       // 处理登录失败
       handleLoginError(response);
