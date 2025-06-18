@@ -15,7 +15,7 @@ export const useMyUserStore = defineStore("myUserStore", {
         method: "GET",
       });
       this.user.id = id;
-      this.user.name = Student.student_name;
+      this.user.name = Student[0].student_name;
       this.user.user_type = "student";
     },
   },
