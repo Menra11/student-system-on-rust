@@ -71,48 +71,104 @@
           </div>
 
           <!-- 用户类型选择 -->
-          <div class="mb-6 text-gray-700">
-            <label for="学生"
-              ><input
-                type="radio"
-                name="user"
-                id="学生"
-                value="student"
-                v-model="loginData.user"
-              />
-              <font-awesome-icon
-                :icon="['fas', 'user-graduate']"
-                class="mr-1 text-blue-600"
-              />学生</label
-            >
-            <label for="教师"
-              ><input
-                type="radio"
-                name="user"
-                id="教师"
-                class="ml-6"
-                value="teacher"
-                v-model="loginData.user"
-              /><font-awesome-icon
-                :icon="['fas', 'chalkboard-teacher']"
-                class="mr-1 text-blue-600"
-              />教师</label
-            >
-            <label for="管理员"
-              ><input
-                type="radio"
-                name="user"
-                id="管理员"
-                class="ml-6"
-                value="admin"
-                v-model="loginData.user"
-              />
-              <font-awesome-icon
-                :icon="['fas', 'user-shield']"
-                class="mr-1 text-blue-600"
-              />
-              管理员</label
-            >
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-medium mb-3">
+              用户类型
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+              <!-- 学生选项 -->
+              <label
+                for="学生"
+                class="p-3 border border-gray-300 rounded-lg cursor-pointer transition-all duration-300 hover:border-blue-400 hover:shadow-md flex justify-center items-center"
+                :class="{
+                  'bg-blue-100 border-blue-500': loginData.user === 'student',
+                }"
+              >
+                <input
+                  type="radio"
+                  name="user"
+                  id="学生"
+                  value="student"
+                  v-model="loginData.user"
+                  class="hidden"
+                />
+                <div class="flex flex-col items-center">
+                  <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300"
+                    :class="
+                      loginData.user === 'student'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-blue-100 text-blue-600'
+                    "
+                  >
+                    <font-awesome-icon :icon="['fas', 'user-graduate']" />
+                  </div>
+                  <span class="mt-1">学生</span>
+                </div>
+              </label>
+
+              <!-- 教师选项 -->
+              <label
+                for="教师"
+                class="p-3 border border-gray-300 rounded-lg cursor-pointer transition-all duration-300 hover:border-blue-400 hover:shadow-md flex justify-center items-center"
+                :class="{
+                  'bg-blue-100 border-blue-500': loginData.user === 'teacher',
+                }"
+              >
+                <input
+                  type="radio"
+                  name="user"
+                  id="教师"
+                  value="teacher"
+                  v-model="loginData.user"
+                  class="hidden"
+                />
+                <div class="flex flex-col items-center">
+                  <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300"
+                    :class="
+                      loginData.user === 'teacher'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-blue-100 text-blue-600'
+                    "
+                  >
+                    <font-awesome-icon :icon="['fas', 'chalkboard-teacher']" />
+                  </div>
+                  <span class="mt-1">教师</span>
+                </div>
+              </label>
+
+              <!-- 管理员选项 -->
+              <label
+                for="管理员"
+                class="p-3 border border-gray-300 rounded-lg cursor-pointer transition-all duration-300 hover:border-blue-400 hover:shadow-md flex justify-center items-center"
+                :class="{
+                  'bg-blue-100 border-blue-500': loginData.user === 'admin',
+                }"
+              >
+                <input
+                  type="radio"
+                  name="user"
+                  id="管理员"
+                  value="admin"
+                  v-model="loginData.user"
+                  class="hidden"
+                />
+                <div class="flex flex-col items-center">
+                  <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300"
+                    :class="
+                      loginData.user === 'admin'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-blue-100 text-blue-600'
+                    "
+                  >
+                    <font-awesome-icon :icon="['fas', 'user-shield']" />
+                  </div>
+                  <span class="mt-1">管理员</span>
+                </div>
+              </label>
+            </div>
           </div>
 
           <!-- 登录按钮 -->
@@ -121,9 +177,17 @@
             class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             @click="useLogin"
           >
-            <span v-if="!isLoading"><font-awesome-icon :icon="['fas', 'sign-in-alt']" class="mr-2" />登录</span>
+            <span v-if="!isLoading"
+              ><font-awesome-icon
+                :icon="['fas', 'sign-in-alt']"
+                class="mr-2"
+              />登录</span
+            >
             <span v-else class="flex items-center">
-              <font-awesome-icon :icon="['fas', 'spinner']" class="animate-spin mr-2" />
+              <font-awesome-icon
+                :icon="['fas', 'spinner']"
+                class="animate-spin mr-2"
+              />
               登录中...
             </span>
           </button>
@@ -134,13 +198,18 @@
               class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-300 cursor-pointer"
               @click="useRegister"
             >
-              <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-1" /> 注册
+              <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-1" />
+              注册
             </span>
             <a
               href="#"
               class="text-gray-500 hover:text-gray-700 text-sm transition-colors duration-300"
             >
-               <font-awesome-icon :icon="['fas', 'question-circle']" class="mr-1" /> <del>忘记密码？</del>
+              <font-awesome-icon
+                :icon="['fas', 'question-circle']"
+                class="mr-1"
+              />
+              <del>忘记密码？</del>
             </a>
           </div>
         </form>
@@ -274,4 +343,13 @@ let useRegister = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.input-focus:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+.shadow-blue {
+  box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2),
+    0 2px 4px -1px rgba(30, 64, 175, 0.06);
+}
+</style>

@@ -18,7 +18,10 @@
             class="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg"
           >
             <div class="flex items-center">
-              <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+              <font-awesome-icon
+                :icon="['fas', 'exclamation-circle']"
+                class="mr-2"
+              />
               <span>{{ errorMessage }}</span>
             </div>
           </div>
@@ -40,7 +43,9 @@
                 placeholder="请输入学号"
                 v-model.number="registerData.student_id"
               />
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
                 <font-awesome-icon :icon="['fas', 'hashtag']" />
               </div>
             </div>
@@ -63,12 +68,14 @@
                 placeholder="请输入真实姓名"
                 v-model="registerData.student_name"
               />
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
                 <font-awesome-icon :icon="['fas', 'signature']" />
               </div>
             </div>
           </div>
-          
+
           <!-- 密码 -->
           <div class="mb-4">
             <label
@@ -86,7 +93,9 @@
                 placeholder="请输入注册密码"
                 v-model="registerData.password"
               />
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
                 <font-awesome-icon :icon="['fas', 'key']" />
               </div>
             </div>
@@ -98,28 +107,67 @@
               <font-awesome-icon :icon="['fas', 'venus-mars']" class="mr-1" />
               性别
             </label>
-            <div class="flex space-x-4">
-              <label class="flex items-center">
+            <div class="grid grid-cols-2 gap-3">
+              <!-- 男性选项 -->
+              <label
+                class="p-4 border rounded-lg cursor-pointer transition-all duration-300 hover:shadow-md flex justify-center items-center"
+                :class="
+                  registerData.gender === '男'
+                    ? 'bg-blue-100 border-blue-500'
+                    : ' border-gray-300'
+                "
+              >
                 <input
                   type="radio"
                   name="gender"
                   value="男"
                   v-model="registerData.gender"
-                  class="mr-2 h-4 w-4 text-blue-600"
+                  class="hidden"
                 />
-                <font-awesome-icon :icon="['fas', 'mars']" class="mr-1 text-blue-500" />
-                <span>男</span>
+                <div class="flex flex-col items-center">
+                  <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-xl transition-all duration-300"
+                    :class="
+                      registerData.gender === '男'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-blue-100 text-blue-600'
+                    "
+                  >
+                    <font-awesome-icon :icon="['fas', 'mars']" />
+                  </div>
+                  <span class="mt-2 font-medium text-gray-700">男</span>
+                </div>
               </label>
-              <label class="flex items-center">
+
+              <!-- 女性选项 -->
+              <label
+                class="p-4 border border-gray-300 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-md flex justify-center items-center"
+                :class="
+                  registerData.gender === '女'
+                    ? 'bg-pink-100 border-pink-400'
+                    : ' border-gray-300'
+                "
+              >
                 <input
                   type="radio"
                   name="gender"
                   value="女"
                   v-model="registerData.gender"
-                  class="mr-2 h-4 w-4 text-blue-600"
+                  class="hidden"
                 />
-                <font-awesome-icon :icon="['fas', 'venus']" class="mr-1 text-pink-500" />
-                <span>女</span>
+                <div class="flex flex-col items-center">
+                  <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-xl transition-all duration-300"
+                    :class="
+                      registerData.gender === '女'
+                        ? 'bg-pink-500 text-white'
+                        : 'bg-pink-100 text-pink-600'
+                    "
+                  >
+                    <font-awesome-icon :icon="['fas', 'venus']" />
+                  </div>
+                  <span class="mt-2 font-medium text-gray-700">女</span>
+                </div>
               </label>
             </div>
           </div>
@@ -130,7 +178,10 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="birth_date"
             >
-              <font-awesome-icon :icon="['fas', 'calendar-days']" class="mr-1" />
+              <font-awesome-icon
+                :icon="['fas', 'calendar-days']"
+                class="mr-1"
+              />
               出生日期
             </label>
             <div class="relative">
@@ -140,7 +191,9 @@
                 class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
                 v-model="registerData.birth_date"
               />
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
                 <font-awesome-icon :icon="['fas', 'calendar']" />
               </div>
             </div>
@@ -152,7 +205,10 @@
               class="block text-gray-700 text-sm font-medium mb-2"
               for="class_name"
             >
-              <font-awesome-icon :icon="['fas', 'graduation-cap']" class="mr-1" />
+              <font-awesome-icon
+                :icon="['fas', 'graduation-cap']"
+                class="mr-1"
+              />
               选择班级
             </label>
             <div class="relative">
@@ -198,7 +254,9 @@
                 placeholder="请输入手机号码"
                 v-model="registerData.phone"
               />
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
                 <font-awesome-icon :icon="['fas', 'mobile-screen']" />
               </div>
             </div>
@@ -221,7 +279,9 @@
                 placeholder="请输入常用邮箱"
                 v-model="registerData.email"
               />
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
                 <font-awesome-icon :icon="['fas', 'at']" />
               </div>
             </div>
@@ -237,7 +297,10 @@
               注册账号
             </span>
             <span v-else class="flex items-center">
-              <font-awesome-icon :icon="['fas', 'spinner']" class="animate-spin mr-2" />
+              <font-awesome-icon
+                :icon="['fas', 'spinner']"
+                class="animate-spin mr-2"
+              />
               注册中...
             </span>
           </button>
@@ -295,7 +358,7 @@ const handleSubmit = async () => {
     // 这里调用注册API
     const response = await $fetch("/api/register", {
       method: "POST",
-      params: registerData ,
+      params: registerData,
     });
 
     // 模拟注册成功
@@ -326,7 +389,7 @@ const validateForm = (): boolean => {
     errorMessage.value = "请输入姓名";
     return false;
   }
-  
+
   if (!registerData.password || registerData.password.length < 6) {
     errorMessage.value = "密码长度至少为6位";
     return false;
@@ -374,6 +437,7 @@ const goToLogin = () => {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 .shadow-blue {
-  box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2), 0 2px 4px -1px rgba(30, 64, 175, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2),
+    0 2px 4px -1px rgba(30, 64, 175, 0.06);
 }
 </style>
