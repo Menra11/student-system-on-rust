@@ -131,12 +131,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { loginData, LoginResponse } from "~/types/login";
+import type { loginData, LoginResponse } from "@/types/login";
+import {useMyUserStore } from "@/stores/user";
 const router = useRouter();
-
+const userStore = useMyUserStore();
 // 收集输入的账户密码
 let loginData = reactive<loginData>({
-  user_id: 2020001,
+  user_id: 2025001,
   password: "123456",
   user: "student",
 });
@@ -162,6 +163,7 @@ let useLogin = async () => {
 
     if (response.success) {
       // 登录成功，跳转主界面
+      await userStore.getStudentUser(loginData.user_id)
       if (loginData.user === "student") {
         router.push(`/student/${loginData.user_id}`);
       } else if (loginData.user === "teacher") {
@@ -169,6 +171,7 @@ let useLogin = async () => {
       } else if (loginData.user === "admin") {
         router.push("/students");
       }
+      
     } else {
       // 处理登录失败
       handleLoginError(response);
