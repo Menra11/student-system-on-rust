@@ -12,7 +12,7 @@
         <nav class="p-6 flex flex-wrap gap-4">
           <NuxtLink
             :to="`/student/${userStore.user.id}`"
-            class=" px-5 py-3 border border-gray-200 rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300  focus:bg-blue-100 focus:border-blue-500 focus:text-blue-700"
+            class="px-5 py-3 border border-gray-200 shadow-blue rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:bg-blue-100 focus:border-blue-500 focus:text-blue-700"
            
           >
             <font-awesome-icon :icon="['fas', 'user-circle']" class="mr-2" />
@@ -21,7 +21,7 @@
 
           <NuxtLink
             :to="`/student/${userStore.user.id}/sourseSelection`"
-            class="px-5 py-3 border border-gray-200 rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:bg-blue-100 focus:border-blue-500 focus:text-blue-700"
+            class="px-5 py-3 border border-gray-200 shadow-blue rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:bg-blue-100 focus:border-blue-500 focus:text-blue-700"
             
           >
             <font-awesome-icon :icon="['fas', 'book']" class="mr-2" />
