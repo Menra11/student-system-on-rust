@@ -229,6 +229,7 @@
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
 import type { Course } from "@/types/course";
+import type { Teacher } from "@/types/teacher";
 
 definePageMeta({
   title: "课程选择",
@@ -249,6 +250,7 @@ const courses = ref<Course[]>([
     classroom: "",
     schedule: "",
     description: "",
+    video_id: null,
   },
 ]);
 
@@ -262,7 +264,7 @@ const searchParams = ref({
 });
 // 获取所有课程
 const getCourses = async () => {
-  const response = await $fetch("/api/course", {
+  const response = await $fetch<Course[]>("/api/course", {
     method: "GET",
   });
   courses.value = response;
@@ -276,7 +278,7 @@ const getCourses = async () => {
 };
 // 获取所有教师
 const getTeachers = async () => {
-  const response = await $fetch("/api/teacher", {
+  const response = await $fetch<Teacher[]>("/api/teacher", {
     method: "GET",
   });
   teachers.value = response;
@@ -359,7 +361,7 @@ const submitSelection = async () => {
     isSubmitting.value = true;
     
     // 实际项目中调用API提交选课数据
-    const response = await $fetch('/api/select-courses', {
+    const response = await $fetch('/api/student/select-courses', {
       method: 'POST',
       params: {
         studentId: userStore.user.id,

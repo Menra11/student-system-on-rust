@@ -6,6 +6,7 @@ export interface Course {
   classroom: string;
   schedule: string;
   description: string;
+  video_id: number;
 }
 export interface CourseResponse {
   studentId: number;
