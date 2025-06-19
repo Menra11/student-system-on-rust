@@ -56,7 +56,7 @@
             {{video.video_description}}
           </p>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-blue-600 font-medium">{{video.video_duration}}分钟</span>
+            <span class="text-sm text-blue-600 font-medium">{{formatTime(video.video_duration)}}</span>
             <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded" v-if="video.completed">已观看</span>
             <span class="text-sm bg-orange-100 text-orange-800 px-2 py-1 rounded" v-else>未观看</span>
           </div>
@@ -80,12 +80,17 @@ const videoData = ref<Video[]>([
     video_title: "导数和微分",
     video_description: "本课程讲解导数的基本概念和微分应用...",
     video_url: "1.mp4",
-    video_duration: "45",
+    video_duration: 45,
     video_lecturer: "张教授",
     course_name: "高等数学",
     completed: true,
   },
 ]);
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+};
 onMounted(async () => {
   const res = await $fetch<Video[]>("/api/video");
 

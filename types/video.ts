@@ -3,7 +3,7 @@ export interface Video{
   video_title: string,
   video_description: string,
   video_url: string,
-  video_duration: string,
+  video_duration: number,
   video_lecturer: string,
   course_name: string,
   completed: boolean
@@ -13,7 +13,7 @@ export interface VideoResponse{
   video_title: string,
   video_description: string,
   video_url: string,
-  video_duration: string,
+  video_duration: number,
   video_lecturer: string,
   course_id: number,
   course_name: string,
