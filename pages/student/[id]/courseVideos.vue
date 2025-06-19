@@ -49,15 +49,6 @@
         class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
         @click="() => $router.push(`/student/${userStore.user.id}/courseVideo/${video.video_id}`)"
       >
-        <div class="relative pb-[56.25%] bg-gray-200">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div
-              class="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center"
-            >
-              <font-awesome-icon :icon="['fas', 'play']" class="text-xl" />
-            </div>
-          </div>
-        </div>
         <div class="p-4">
           <h3 class="font-bold text-lg mb-1">{{video.course_name}} - {{ video.video_title }}</h3>
           <p class="text-gray-600 text-sm mb-2">{{ video.video_lecturer }}</p>
