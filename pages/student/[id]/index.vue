@@ -92,7 +92,9 @@
 import type { Student,Score,StudentGet } from "~/types/student";
 const route = useRoute()
 const router = useRouter()
-
+definePageMeta({
+  title: '学生信息'
+});
 const student = ref<Student>({
   student_id: 0,
   student_name: '',

@@ -8,6 +8,7 @@ export const useMyUserStore = defineStore("myUserStore", {
       name: "",
       user_type: "",
       token: null,
+      selectedCourses: [],
     },
   }),
   actions: {
@@ -24,13 +25,14 @@ export const useMyUserStore = defineStore("myUserStore", {
       }
     },
     async getStudentUser(id: number) {
-      const { Student } = await $fetch<StudentGet>(`/api/student/${id}`, {
+      const { Student,Scores } = await $fetch<StudentGet>(`/api/student/${id}`, {
         method: "GET",
       });
       this.user.id = id;
       this.user.name = Student[0].student_name;
       this.user.user_type = "student";
       this.user.token = localStorage.getItem("token");
+      this.user.selectedCourses = Scores;
     },
   },
   persist: true,

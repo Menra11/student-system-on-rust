@@ -20,7 +20,7 @@
           </NuxtLink>
 
           <NuxtLink
-            :to="`/student/${userStore.user.id}/sourseSelection`"
+            :to="`/student/${userStore.user.id}/courseSelection`"
             class="px-5 py-3 border border-gray-200 shadow-blue rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:bg-blue-100 focus:border-blue-500 focus:text-blue-700"
             
           >
@@ -51,7 +51,7 @@
       <!-- 内容区域卡片 -->
       <div class="bg-white rounded-2xl shadow-blue overflow-hidden">
         <div class="bg-gradient-to-r from-blue-600 to-blue-700 py-4 px-6">
-          <h2 class="text-xl font-bold text-white">内容区域</h2>
+          <h2 class="text-xl font-bold text-white">{{ $route.meta.title || '内容区域' }}</h2>
         </div>
 
         <div class="p-6">
