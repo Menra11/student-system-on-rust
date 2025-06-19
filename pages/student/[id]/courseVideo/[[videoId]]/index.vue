@@ -151,6 +151,7 @@
 
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
+import type { VideoGet,VideoResponse,Progress } from "@/types/video";
 definePageMeta({
   title: "课程视频", // 设置页面标题
 });
@@ -324,7 +325,17 @@ watch(
   },
   { immediate: true }
 );
-
+onMounted(async() => {
+  const res = await $fetch<VideoGet>("/api/student/course-video/videoId",{
+    method: "GET",
+    params: {
+      id: route.params.videoId,
+      student_id: userStore.user.id,
+    },
+  });
+  console.log(res);
+  
+});
 // 组件卸载时清除计时器
 onUnmounted(() => {
   if (timerInterval.value) {

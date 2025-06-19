@@ -1,0 +1,51 @@
+import pool from '../../db'
+export default defineEventHandler(async (event) => {
+  try {
+    const { id,student_id } = getQuery(event);
+    console.log(id,student_id);
+    
+    // 获取视频基本信息
+    const [video] = await pool.query(`
+      SELECT v.*, c.course_name 
+      FROM video v
+      LEFT JOIN course c ON v.course_id = c.course_id
+      WHERE v.video_id = ?;
+    `, [id])
+    
+    if (!video) {
+      return {
+        success: false,
+        message: "获取视频失败",
+      };
+    }
+    
+    // 获取视频阅读记录
+    let progress:any;
+    progress = await pool.query(`
+      SELECT *
+      FROM student_video_progress sp
+      WHERE sp.student_id = ? AND sp.video_id = ?;
+    `, [student_id, id])
+    
+    if(!progress){
+      await pool.query(`
+        INSERT INTO student_video_progress (student_id, video_id,progress,completed)
+        VALUES (?, ?,0,0);
+      `, [student_id, id])
+      progress = await pool.query(`
+      SELECT *
+      FROM student_video_progress sp
+      WHERE sp.student_id = ? AND sp.video_id = ?;
+    `, [student_id, id])
+    }
+    return {
+      video: video,
+      progress: progress[0]
+    }
+  } catch (error) {
+    return {
+        success: false,
+        message: "视频访问失败",
+      };
+  }
+})

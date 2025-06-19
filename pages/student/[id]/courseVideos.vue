@@ -85,15 +85,16 @@ const videoData = ref<Video[]>([
     course_name: "高等数学",
     completed: true,
   },
-  {
-    video_id: 2,
-    video_title: "语法和词法",
-    video_description: "本课程讲解英语语法和词法基础...",
-    video_url: "2.mp4",
-    video_duration: "60",
-    video_lecturer: "李老师",
-    course_name: "大学英语",
-    completed: false,
-  },
 ]);
+onMounted(async () => {
+  const res = await $fetch<Video[]>("/api/video");
+
+  videoData.value = res;
+  videoData.value = videoData.value.filter(
+    (course) =>
+      userStore.user.selectedCourses.some(
+        (selectedCourse) => selectedCourse.course_name === course.course_name
+      )
+  );
+});
 </script>
