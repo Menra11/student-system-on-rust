@@ -39,7 +39,5 @@ export default defineEventHandler(async (event) => {
     await pool.query(insertQuery, [insertValues]);
   }
   const [updatedRows] = await pool.query(progressQuery, [student_id]);
-  console.log(updatedRows);
-  
   return updatedRows;
 });
