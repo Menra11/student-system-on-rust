@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white rounded-lg shadow p-6">
     <!-- 视频列表区域 -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- 视频卡片1 -->
@@ -15,7 +15,7 @@
           </p>
           <div class="flex justify-between items-center">
             <span class="text-sm text-blue-600 font-medium">{{course.schedule}}</span>
-            <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">查看视频数据</span>
+            <NuxtLink :to="`/teacher/${userStore.user.id}/videoInfo`" class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900">查看视频数据</NuxtLink> 
           </div>
         </div>
       </div>
