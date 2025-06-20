@@ -70,21 +70,6 @@
           </table>
         </div>
       </div>
-      
-      <div class="mt-8 flex justify-end space-x-4">
-        <button 
-          @click="goBack"
-          class="px-4 py-2 border rounded-md hover:bg-gray-100"
-        >
-          返回
-        </button>
-        <!-- <button 
-          @click="editStudent"
-          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          编辑信息
-        </button> -->
-      </div>
     </div>
 </template>
 
@@ -125,14 +110,6 @@ const fetchStudent = async () => {
     student.value = Student[0]
     scores.value = Scores
   }
-}
-// 返回上一页
-const goBack = () => {
-  router.back()
-}
-// 编辑学生
-const editStudent = () => {
-  router.push(`/student/${route.params.id}/edit`)
 }
 onMounted(() => {
   fetchStudent()

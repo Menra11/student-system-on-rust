@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     
     // 获取学生基本信息
     const [student] = await pool.query(`
-      SELECT s.*, c.class_name 
+      SELECT s.student_id,s.student_name,s.gender,s.birth_date,s.phone,s.email,s.class_id, c.class_name 
       FROM Student s
       LEFT JOIN Class c ON s.class_id = c.class_id
       WHERE s.student_id = ?
@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
       WHERE sc.student_id = ?
       ORDER BY sc.semester DESC
     `, [id])
+    console.log(student);
     
     return {
       Student: student,

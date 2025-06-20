@@ -229,9 +229,9 @@ const router = useRouter();
 const userStore = useMyUserStore();
 // 收集输入的账户密码
 let loginData = reactive<loginData>({
-  user_id: 2025001,
+  user_id: 1001,
   password: "123456",
-  user: "student",
+  user: "teacher",
 });
 // 登录表单响应
 let loginForm = ref();
@@ -255,7 +255,8 @@ let useLogin = async () => {
 
     if (response.success) {
       userStore.setToken(response.token);
-      await userStore.getStudentUser(loginData.user_id);
+      await userStore.getUser(loginData.user_id,loginData.user);
+      
       if (import.meta.server) {
         // 设置cookie，有效期与token相同
         document.cookie = `token=${response.token}; path=/; max-age=${
@@ -268,7 +269,7 @@ let useLogin = async () => {
       if (loginData.user === "student") {
         router.push(`/student/${loginData.user_id}`);
       } else if (loginData.user === "teacher") {
-        // router.push("/teacher");
+        router.push(`/teacher/${loginData.user_id}`);
       } else if (loginData.user === "admin") {
         router.push("/students");
       }
