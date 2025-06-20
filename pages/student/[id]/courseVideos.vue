@@ -51,7 +51,7 @@
       >
         <div class="p-4">
           <h3 class="font-bold text-lg mb-1">{{video.course_name}} - {{ video.video_title }}</h3>
-          <p class="text-gray-600 text-sm mb-2">{{ video.video_lecturer }}</p>
+          <p class="text-gray-600 text-sm mb-2">{{ video.teacher_name }}</p>
           <p class="text-gray-700 mb-3">
             {{video.video_description}}
           </p>
@@ -81,7 +81,7 @@ const videoData = ref<Video[]>([
     video_description: "本课程讲解导数的基本概念和微分应用...",
     video_url: "1.mp4",
     video_duration: 45,
-    video_lecturer: "张教授",
+    teacher_name: "张教授",
     course_name: "高等数学",
     completed: true,
   },

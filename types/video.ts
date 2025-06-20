@@ -4,7 +4,7 @@ export interface Video{
   video_description: string,
   video_url: string,
   video_duration: number,
-  video_lecturer: string,
+  teacher_name: string,
   course_name: string,
   completed: boolean
 }
