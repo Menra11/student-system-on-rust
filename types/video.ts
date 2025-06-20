@@ -14,8 +14,7 @@ export interface VideoResponse{
   video_description: string,
   video_url: string,
   video_duration: number,
-  video_lecturer: string,
-  course_id: number,
+  teacher_name: string,
   course_name: string,
 }
 export interface Progress{

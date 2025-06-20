@@ -113,7 +113,7 @@
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <h4 class="text-sm font-medium text-gray-500">讲师</h4>
-                <p class="font-medium">{{ videoData.video_lecturer }}</p>
+                <p class="font-medium">{{ videoData.teacher_name }}</p>
               </div>
 
               <div>
@@ -159,8 +159,7 @@ const videoData = ref<VideoResponse>({
   video_description: "",
   video_url: "",
   video_duration: null,
-  video_lecturer: "",
-  course_id: null,
+  teacher_name: "",
   course_name: "",
 });
 const progressData = ref<Progress>({

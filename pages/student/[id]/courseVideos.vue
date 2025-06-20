@@ -92,7 +92,12 @@ const formatTime = (seconds: number) => {
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
 onMounted(async () => {
-  const res = await $fetch<Video[]>("/api/video");
+  const res = await $fetch<Video[]>("/api/video",{
+    method: "GET",
+    params: {
+      student_id: userStore.user.id,
+    },
+  });
 
   videoData.value = res;
   videoData.value = videoData.value.filter(
