@@ -17,6 +17,13 @@
             <font-awesome-icon :icon="['fas', 'user-circle']" class="mr-2" />
             教师详情
           </NuxtLink>
+          <NuxtLink
+            :to="`/teacher/${userStore.user.id}/studentsInformation`"
+            class="px-5 py-3 border border-gray-200 shadow-blue rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:bg-blue-100 focus:border-blue-500 focus:text-blue-700"
+          >
+            <font-awesome-icon :icon="['fas', 'user-circle']" class="mr-2" />
+            学生信息
+          </NuxtLink>
 
           
           
