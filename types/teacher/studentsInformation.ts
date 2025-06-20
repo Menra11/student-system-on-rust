@@ -4,3 +4,6 @@ export interface StudentsInformation {
   course_name: string;
   class_name: string;
 }
+export interface StudentsInformationResponse {
+  StudentsInformation: StudentsInformation[];
+}

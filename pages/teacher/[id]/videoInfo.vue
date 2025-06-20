@@ -1,5 +1,14 @@
 <template>
   <div >
+    <div class="mb-6">
+      <button
+        @click="goBack"
+        class="flex items-center text-blue-600 hover:text-blue-800 font-medium"
+      >
+        <font-awesome-icon :icon="['fas', 'arrow-left']" class="mr-2" />
+        返回
+      </button>
+    </div>
       <!-- 表格区域 -->
       <div class="bg-white rounded-lg shadow p-6">
           <div class="overflow-x-auto rounded-lg shadow">
@@ -119,7 +128,7 @@ definePageMeta({
   title: "学生视频学习管理",
 });
 const route = useRoute();
-
+const router = useRouter();
 const videoInfo = ref<VideoInfo[]>([
   {
     student_id: 0,
@@ -132,7 +141,9 @@ const videoInfo = ref<VideoInfo[]>([
     score: 0,
   },
 ]);
-
+const goBack = () => {
+  router.go(-1);
+};
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);

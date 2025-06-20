@@ -1,42 +1,71 @@
 <template>
-  <div>
-    <table>
-      <thead><tr>
-        <th>学生ID</th>
-        <th>学生姓名</th>
-        <th>课程</th>
-        <th>班级</th>
-        <th>操作</th>
-      </tr></thead>
-      <tbody>
-        <tr v-for="student in studentsInformation" :key="student.student_id">
-          <td>{{ student.student_id }}</td>
-          <td>{{ student.student_name }}</td>
-          <td>{{ student.course_name }}</td>
-          <td>{{ student.class_name }}</td>
-          <td>
-            <NuxtLink :to="`/teacher/${route.params.id}/${student.student_id}`">查看</NuxtLink>
-          </td>
-        </tr>
-      </tbody >
-    </table>
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="overflow-x-auto rounded-lg shadow">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-blue-50" align="center" valign="middle">
+          <tr>
+            <th class="px-2 py-2 text-xs text-blue-700">学生ID</th>
+            <th class="px-2 py-2 text-xs text-blue-700">学生姓名</th>
+            <th class="px-2 py-2 text-xs text-blue-700">课程</th>
+            <th class="px-2 py-2 text-xs text-blue-700">班级</th>
+            <th class="px-2 py-2 text-xs text-blue-700">操作</th>
+          </tr>
+        </thead>
+        <tbody
+          class="bg-white divide-y divide-gray-200"
+          align="center"
+          valign="middle"
+        >
+          <tr
+            class="hover:bg-blue-50 transition-colors"
+            v-for="student in studentsInformation"
+            :key="student.student_id"
+          >
+            <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              {{ student.student_id }}
+            </td>
+            <td class="px-2 py-2 text-sm text-gray-600 max-w-xs">
+              {{ student.student_name }}
+            </td>
+            <td class="px-2 py-2 text-sm text-gray-600 max-w-xs">
+              {{ student.course_name }}
+            </td>
+            <td class="px-2 py-2 text-sm text-gray-600 max-w-xs">
+              {{ student.class_name }}
+            </td>
+            <td class="px-2 py-2 whitespace-nowrap text-sm">
+              <NuxtLink
+                :to="`/teacher/${route.params.id}/${student.student_id}`"
+                class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                >查看</NuxtLink
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { StudentsInformation } from '@/types/teacher/studentsInformation';
+import type {
+  StudentsInformation,
+  StudentsInformationResponse,
+} from "@/types/teacher/studentsInformation";
 const route = useRoute();
 definePageMeta({
   title: "学生信息",
 });
-const studentsInformation = ref<StudentsInformation[]>({
-  student_id: 0,
-  student_name: '',
-  course_name: '',
-  class_name: '',
-});
+const studentsInformation = ref<StudentsInformation[]>([
+  {
+    student_id: 0,
+    student_name: "",
+    course_name: "",
+    class_name: "",
+  },
+]);
 const getStudentsInformation = async () => {
-  const {StudentsInformation} = await $fetch<StudentsInformation>(
+  const { StudentsInformation } = await $fetch<StudentsInformationResponse>(
     `/api/teacher/${route.params.id}/studentsInformation`
   );
   studentsInformation.value = StudentsInformation;
@@ -46,6 +75,4 @@ onMounted(() => {
 });
 </script>
 
-<style>
-
-</style>
+<style></style>
