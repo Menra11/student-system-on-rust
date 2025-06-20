@@ -5,3 +5,6 @@ export interface Course {
   schedule: string;
   description: string;
 }
+export interface CourseResponse {
+  CoursesInformation: Course[];
+}

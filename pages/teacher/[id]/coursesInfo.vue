@@ -8,14 +8,25 @@
         class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
       >
         <div class="p-4">
-          <h3 class="font-bold text-lg mb-1">{{course.course_name}}</h3>
+          <h3 class="font-bold text-lg mb-1">{{ course.course_name }}</h3>
           <p class="text-gray-600 text-sm mb-2">{{ course.credit }} 学分</p>
           <p class="text-gray-700 mb-3">
-            {{course.description}}
+            {{ course.description }}
           </p>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-blue-600 font-medium">{{course.schedule}}</span>
-            <NuxtLink :to="`/teacher/${userStore.user.id}/videoInfo`" class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900">查看视频数据</NuxtLink> 
+            <span class="text-sm text-blue-600 font-medium">{{
+              course.schedule
+            }}</span>
+            <NuxtLink
+              :to="`/teacher/${userStore.user.id}/videoInfo`"
+              class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
+              >查看视频数据</NuxtLink
+            >
+            <NuxtLink
+              :to="`/teacher/${userStore.user.id}/videoManagement`"
+              class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
+              >视频管理</NuxtLink
+            >
           </div>
         </div>
       </div>
@@ -25,7 +36,7 @@
 
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
-import type { Course } from "@/types/teacher/course";
+import type { Course,CourseResponse } from "@/types/teacher/course";
 const route = useRoute();
 definePageMeta({
   title: "教授课程信息", // 设置页面标题
@@ -42,9 +53,12 @@ const courseData = ref<Course[]>([
   },
 ]);
 onMounted(async () => {
-  const {CoursesInformation} = await $fetch<Course[]>(`/api/teacher/${route.params.id}/coursesInfo`,{
-    method: "GET",
-  });
+  const { CoursesInformation } = await $fetch<CourseResponse>(
+    `/api/teacher/${route.params.id}/coursesInfo`,
+    {
+      method: "GET",
+    }
+  );
 
   courseData.value = CoursesInformation;
 });
