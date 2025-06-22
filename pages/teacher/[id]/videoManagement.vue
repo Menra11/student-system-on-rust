@@ -19,7 +19,7 @@
               valign="middle"
             >
               <tr
-                v-for="(video,item) in videoForm"
+                v-for="(video, item) in videoForm"
                 :key="item"
                 class="hover:bg-blue-50 transition-colors"
               >
@@ -428,18 +428,14 @@ const saveVideoToDatabase = async (video: Video, filename: string) => {
   video.course_id = course_id.value;
   video.video_url = filename;
   console.log(video);
-  
-  try{
+
+  try {
     await $fetch(`/api/teacher/${route.params.id}/addVideo`, {
-    method: 'POST',
-    body: {
-      ...video,
-      filename,
-    }
-  });
-  console.log('保存成功');
-  
-  }catch(error){
+      method: "POST",
+      body:  video,
+    });
+    console.log("保存成功");
+  } catch (error) {
     console.log(error);
   }
 };
@@ -452,21 +448,20 @@ const saveVideo = async (file: File) => {
     const response = await $fetch<UploadVideoRes>(`/api/uploadVideo`, {
       method: "POST",
       body: formData,
-      params:{
+      params: {
         video_title: editingVideo.value.video_title,
-      }
+      },
     });
 
     if (!response.success) {
       throw new Error("上传失败");
     }
-    openEditDialog()
-    saveVideoToDatabase(editingVideo.value,response.filename)
+    saveVideoToDatabase(editingVideo.value, response.filename);
+    openEditDialog();
   } catch (error) {
     console.error("上传出错:", error);
   }
 };
-
 
 const updateVideoList = async () => {
   const { CoursesInformation } = await $fetch<CourseResponse>(
