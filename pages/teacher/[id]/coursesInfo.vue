@@ -45,6 +45,7 @@ definePageMeta({
 const userStore = useMyUserStore();
 const courseData = ref<Course[]>([
   {
+    course_id: 1,
     course_name: "数据结构",
     credit: 2,
     classroom: "教室101",

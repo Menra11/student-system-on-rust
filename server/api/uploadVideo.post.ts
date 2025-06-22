@@ -10,14 +10,16 @@ if (!fs.existsSync(VIDEO_DIR)) {
 
 export default defineEventHandler(async (event) => {
   const formData = await readFormData(event);
+  const {video_title} = getQuery(event);
   const videoFile = formData.get('video') as File;
-
+  const videoInfo = videoFile.name.split('.');
+  const videoName = video_title +'.' + videoInfo[1];
   if (!videoFile) {
     return { success: false, message: '未找到视频文件' };
   }
 
   // 获取文件名并保存到目标目录
-  const filename = `${Date.now()}-${videoFile.name}`;
+  const filename = `${Date.now()}-${videoName}`;
   const filePath = path.join(VIDEO_DIR, filename);
 
   // 将文件写入磁盘（这里假设使用 Node.js 的 fs 模块）
