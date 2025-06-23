@@ -6,7 +6,7 @@ interface svRow {
 }
 
 export default defineEventHandler(async (event) => {
-  const { student_id } = getQuery(event);
+  const student_id = event.context.params?.id
   const progressQuery = `SELECT v.video_id,v.video_title,v.video_description,v.video_url,v.video_duration,t.teacher_name,c.course_name,s.completed 
       FROM video v
       right join student_video_progress s on s.video_id = v.video_id 

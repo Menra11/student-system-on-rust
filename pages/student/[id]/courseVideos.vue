@@ -47,7 +47,7 @@
       <div
         v-for="video in videoData"
         class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-        @click="() => $router.push(`/student/${userStore.user.id}/courseVideo/${video.video_id}`)"
+        @click="() => $router.push(`/student/${userStore.user.id}/${video.video_id}`)"
       >
         <div class="p-4">
           <h3 class="font-bold text-lg mb-1">{{video.course_name}} - {{ video.video_title }}</h3>
@@ -73,6 +73,8 @@ definePageMeta({
   title: "课程视频", // 设置页面标题
 });
 
+const route = useRoute();
+const router = useRouter();
 const userStore = useMyUserStore();
 const videoData = ref<Video[]>([
   {
@@ -91,20 +93,11 @@ const formatTime = (seconds: number) => {
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
-onMounted(async () => {
-  const res = await $fetch<Video[]>("/api/video",{
-    method: "GET",
-    params: {
-      student_id: userStore.user.id,
-    },
-  });
 
+onMounted(async () => {
+  const res = await $fetch<Video[]>(`/api/student/${route.params.id}/videos`,{
+    method: "GET",
+  });
   videoData.value = res;
-  videoData.value = videoData.value.filter(
-    (course) =>
-      userStore.user.selectedCourses.some(
-        (selectedCourse) => selectedCourse.course_name === course.course_name
-      )
-  );
 });
 </script>

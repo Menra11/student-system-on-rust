@@ -229,9 +229,9 @@ const router = useRouter();
 const userStore = useMyUserStore();
 // 收集输入的账户密码
 let loginData = reactive<loginData>({
-  user_id: 1001,
+  user_id: 2025001,
   password: "123456",
-  user: "teacher",
+  user: "student",
 });
 // 登录表单响应
 let loginForm = ref();

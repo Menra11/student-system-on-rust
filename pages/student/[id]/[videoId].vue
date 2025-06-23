@@ -250,7 +250,7 @@ const videoEnded = async () => {
   );
   const completed = completionRate == 100 ? 1 : 0;
   const progress = watchedTime.value / videoData.value.video_duration;
-  const res = await $fetch<VideoGet>("/api/student/course-video/videoId", {
+  const res = await $fetch<VideoGet>(`/api/student/${route.params.id}/course-video/${route.params.videoId}`, {
     method: "post",
     params: {
       id: route.params.videoId,
@@ -264,12 +264,12 @@ const videoEnded = async () => {
 };
 
 // 加载视频
-const loadVideo = (id: string) => {
+const loadVideo = () => {
   isLoading.value = true;
 
   // 模拟视频加载延迟
   setTimeout(() => {
-    videoSource.value = `/_nuxt/assets/videos/${route.params.videoId}.mp4`;
+    videoSource.value = `/_nuxt/assets/videos/${videoData.value.video_url}`;
     isLoading.value = false;
   }, 1000);
 };
@@ -277,19 +277,15 @@ watch(
   () => route.params.videoId,
   (newVideoId) => {
     if (newVideoId) {
-      loadVideo(newVideoId as string);
+      loadVideo();
     }
   },
   { immediate: true }
 );
 onMounted(async () => {
   
-  const res = await $fetch<VideoGet>("/api/student/course-video/videoId", {
+  const res = await $fetch<VideoGet>(`/api/student/${route.params.id}/course-video/${route.params.videoId}`, {
     method: "GET",
-    params: {
-      id: route.params.videoId,
-      student_id: userStore.user.id,
-    },
   });
   videoData.value = res.video[0];
   progressData.value = res.progress[0];

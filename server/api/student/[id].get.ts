@@ -28,8 +28,6 @@ export default defineEventHandler(async (event) => {
       WHERE sc.student_id = ?
       ORDER BY sc.semester DESC
     `, [id])
-    console.log(student);
-    
     return {
       Student: student,
       Scores: scores || []

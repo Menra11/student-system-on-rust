@@ -234,7 +234,8 @@ import type { Teacher } from "@/types/teacher";
 definePageMeta({
   title: "课程选择",
 });
-
+const route = useRoute();
+const router = useRouter();
 const userStore = useMyUserStore();
 
 // 模拟教师数据
@@ -356,15 +357,12 @@ const submitSelection = async () => {
     return;
   }
 
-  // console.log(userStore.user.id,selectedCourses.value.map(c => c.course_id));
   try {
     isSubmitting.value = true;
     
-    // 实际项目中调用API提交选课数据
-    const response = await $fetch('/api/student/select-courses', {
+    const response = await $fetch(`/api/student/${route.params.id}/select-courses`, {
       method: 'POST',
       params: {
-        studentId: userStore.user.id,
         courses: selectedCourses.value.map(c => c.course_id)
       }
     });
