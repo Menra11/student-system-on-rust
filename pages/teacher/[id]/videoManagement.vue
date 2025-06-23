@@ -33,13 +33,12 @@
                   {{ formatTime(video.video_duration) }}
                 </td>
                 <td class="px-2 py-2 whitespace-nowrap text-sm">
-                  <button 
-                      @click="delVideo(video.video_id)"
-                      class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-                    >
-                      删除
-                    </button>
-                
+                  <button
+                    @click="delVideo(video.video_id,video.video_url)"
+                    class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                  >
+                    删除
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -426,8 +425,14 @@ const handleUpload = async (file: File) => {
 };
 
 // 删除视频
-const delVideo = async (id: number) => {
+const delVideo = async (id: number,url:string) => {
   try {
+    await $fetch(`/api/delVideoFile`, {
+      method: "DELETE",
+      params: {
+        url,
+      },
+    });
     await $fetch(`/api/teacher/${route.params.id}/${id}`, {
       method: "DELETE",
     });
@@ -438,7 +443,6 @@ const delVideo = async (id: number) => {
 };
 
 const saveVideoToDatabase = async (video: Video, filename: string) => {
-  
   video.course_id = course_id.value;
   video.video_url = filename;
   try {
@@ -457,7 +461,7 @@ const saveVideo = async (file: File) => {
   formData.append("video", file);
 
   try {
-    const response = await $fetch<UploadVideoRes>(`/api/uploadVideo`, {
+    const response = await $fetch<UploadVideoRes>(`/api/uploadVideoFile`, {
       method: "POST",
       body: formData,
       params: {
@@ -468,7 +472,7 @@ const saveVideo = async (file: File) => {
     if (!response.success) {
       throw new Error("上传失败");
     }
-    saveVideoToDatabase(editingVideo.value, response.filename);
+    await saveVideoToDatabase(editingVideo.value, response.filename);
     openEditDialog();
   } catch (error) {
     console.error("上传出错:", error);
