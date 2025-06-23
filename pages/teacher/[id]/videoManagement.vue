@@ -247,10 +247,10 @@
             </button>
             <button
               @click="saveVideo(uploadedFile)"
-              :disabled="uploadStatus === 'uploading'"
+              :disabled="uploadStatus != 'success'"
               :class="{
                 'px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors': true,
-                'opacity-50 cursor-not-allowed': uploadStatus === 'uploading',
+                'opacity-50 cursor-not-allowed': uploadStatus != 'success',
               }"
             >
               保存视频
@@ -320,19 +320,20 @@ const statusMessages = {
 // 打开添加视频的缓冲
 const openEditDialog = () => {
   editDialogLoading.value = !editDialogLoading.value;
-  editingVideo.value = {
-    video_title: "t",
-    video_description: "描述",
-    video_url: "地址",
-    video_duration: 300,
-    course_id: null,
-  };
-  // 重置上传状态
-  uploadedFile.value = null;
-  uploadStatus.value = null;
-  uploadProgress.value = 0;
+
   setTimeout(() => {
     showEditDialog.value = !showEditDialog.value;
+    editingVideo.value = {
+      video_title: "t",
+      video_description: "描述",
+      video_url: "地址",
+      video_duration: 300,
+      course_id: null,
+    };
+    // 重置上传状态
+    uploadedFile.value = null;
+    uploadStatus.value = null;
+    uploadProgress.value = 0;
   }, 500);
 };
 
@@ -427,12 +428,10 @@ const saveVideoToDatabase = async (video: Video, filename: string) => {
   // 实际项目中这里会调用API
   video.course_id = course_id.value;
   video.video_url = filename;
-  console.log(video);
-
   try {
     await $fetch(`/api/teacher/${route.params.id}/addVideo`, {
       method: "POST",
-      body:  video,
+      body: video,
     });
     console.log("保存成功");
   } catch (error) {
