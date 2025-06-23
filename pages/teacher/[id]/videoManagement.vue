@@ -33,13 +33,13 @@
                   {{ formatTime(video.video_duration) }}
                 </td>
                 <td class="px-2 py-2 whitespace-nowrap text-sm">
-                  <!-- <button 
-                      @click="openScoreDialog(index)"
+                  <button 
+                      @click="delVideo(video.video_id)"
                       class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
                     >
-                      操作
-                    </button> -->
-                  操作
+                      删除
+                    </button>
+                
                 </td>
               </tr>
             </tbody>
@@ -279,6 +279,7 @@ definePageMeta({
 const showEditDialog = ref(false);
 const editDialogLoading = ref(false);
 const editingVideo = ref<Video | null>({
+  video_id: null,
   video_title: "t",
   video_description: "描述",
   video_url: "地址",
@@ -324,6 +325,7 @@ const openEditDialog = () => {
   setTimeout(() => {
     showEditDialog.value = !showEditDialog.value;
     editingVideo.value = {
+      video_id: null,
       video_title: "t",
       video_description: "描述",
       video_url: "地址",
@@ -423,9 +425,20 @@ const handleUpload = async (file: File) => {
   }, 200);
 };
 
-// 模拟保存到数据库
+// 删除视频
+const delVideo = async (id: number) => {
+  try {
+    await $fetch(`/api/teacher/${route.params.id}/${id}`, {
+      method: "DELETE",
+    });
+    console.log("删除成功");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const saveVideoToDatabase = async (video: Video, filename: string) => {
-  // 实际项目中这里会调用API
+  
   video.course_id = course_id.value;
   video.video_url = filename;
   try {
@@ -471,7 +484,7 @@ const updateVideoList = async () => {
   );
   course_id.value = CoursesInformation[0].course_id;
   const { Videos } = await $fetch<VideoResponse>(
-    `/api/teacher/${route.params.id}/video`,
+    `/api/teacher/${route.params.id}/videos`,
     {
       method: "GET",
       params: {

@@ -4,6 +4,7 @@ export interface UploadVideoRes {
   filename: string;
 }
 export interface Video {
+  video_id: number;
   video_title: string;
   video_description: string;
   video_url: string;
