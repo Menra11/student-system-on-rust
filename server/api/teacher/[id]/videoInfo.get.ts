@@ -1,4 +1,4 @@
-import pool from '../../db'
+import pool from "@/server/api/db";
 export default defineEventHandler(async (event) => {
   const id = event.context.params.id
   const query = `select sp.student_id,s.student_name,c.course_name,v.video_title,v.video_duration,sp.progress,sp.completed,sc.score

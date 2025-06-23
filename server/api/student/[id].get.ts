@@ -1,4 +1,4 @@
-import pool from '../db'
+import pool from "@/server/api/db";
 
 export default defineEventHandler(async (event) => {
   try {

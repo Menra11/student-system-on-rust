@@ -1,5 +1,4 @@
-import pool from './db'
-
+import pool from "@/server/api/db";
 export default defineEventHandler(async (event) => {
   try {
     // 获取查询参数（分页用）

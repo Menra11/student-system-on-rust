@@ -1,5 +1,4 @@
-// server/api/login.post.ts
-import pool from "./db";
+import pool from "@/server/api/db";
 import jwt from "jsonwebtoken";
 
 // 从环境变量获取密钥，确保在生产环境设置

@@ -1,5 +1,4 @@
-import { log } from 'console'
-import pool from '../../db'
+import pool from "@/server/api/db";
 export default defineEventHandler(async (event) => {
   const id = event.context.params.id
 

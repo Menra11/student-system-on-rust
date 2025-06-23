@@ -1,4 +1,4 @@
-import pool from "./db";
+import pool from "@/server/api/db";
 import type { registerData } from "@/types/register";
 export default defineEventHandler(async (event) => {
   try {

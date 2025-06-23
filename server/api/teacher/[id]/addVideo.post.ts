@@ -1,4 +1,4 @@
-import pool from "../../db";
+import pool from "@/server/api/db";
 import type { Video } from "@/types/teacher/videoManagement"
 export default defineEventHandler(async (event) => {
   const video = await readBody<Video>(event);
