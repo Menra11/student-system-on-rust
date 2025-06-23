@@ -1,8 +1,6 @@
 <template>
   <div>
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-2xl font-bold mb-6">学生列表</h1>
-
       <!-- 搜索和过滤区域 -->
       <div class="mb-6 flex justify-between items-center">
         <div class="flex items-center space-x-4">
@@ -32,38 +30,38 @@
       </div>
 
       <!-- 数据表格 -->
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border">
-          <thead>
-            <tr class="bg-gray-100">
-              <th class="py-3 px-4 border-b text-left">学号</th>
-              <th class="py-3 px-4 border-b text-left">姓名</th>
-              <th class="py-3 px-4 border-b text-left">性别</th>
-              <th class="py-3 px-4 border-b text-left">出生日期</th>
-              <th class="py-3 px-4 border-b text-left">班级</th>
-              <th class="py-3 px-4 border-b text-left">电话</th>
-              <th class="py-3 px-4 border-b text-left">邮箱</th>
-              <th class="py-3 px-4 border-b text-left">操作</th>
+      <div class="overflow-x-auto rounded-lg shadow">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-blue-50" align="center" valign="middle">
+            <tr>
+              <th class="px-2 py-2 text-sm text-blue-700">学号</th>
+              <th class="px-2 py-2 text-sm text-blue-700">姓名</th>
+              <th class="px-2 py-2 text-sm text-blue-700">性别</th>
+              <th class="px-2 py-2 text-sm text-blue-700">出生日期</th>
+              <th class="px-2 py-2 text-sm text-blue-700">班级</th>
+              <th class="px-2 py-2 text-sm text-blue-700">电话</th>
+              <th class="px-2 py-2 text-sm text-blue-700">邮箱</th>
+              <th class="px-2 py-2 text-sm text-blue-700">操作</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white divide-y divide-gray-200" align="center" valign="middle">
             <tr
               v-for="student in filteredStudents"
               :key="student.student_id"
-              class="hover:bg-gray-50"
+              class="hover:bg-blue-50 transition-colors"
             >
-              <td class="py-3 px-4 border-b">{{ student.student_id }}</td>
-              <td class="py-3 px-4 border-b">{{ student.student_name }}</td>
-              <td class="py-3 px-4 border-b">
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.student_id }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.student_name }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.gender }}
               </td>
-              <td class="py-3 px-4 border-b">
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ formatDate(student.birth_date) }}
               </td>
-              <td class="py-3 px-4 border-b">{{ student.class_name }}</td>
-              <td class="py-3 px-4 border-b">{{ student.phone }}</td>
-              <td class="py-3 px-4 border-b">{{ student.email }}</td>
-              <td class="py-3 px-4 border-b">
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.class_name }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.phone }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.email }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
                 <!-- <button
                   @click="viewStudent(student.student_id)"
                   class="text-blue-500 hover:text-blue-700 mr-2"
@@ -137,6 +135,9 @@ import type {
   ClassResponse,
 } from "~/types/student";
 
+definePageMeta({
+  title: "学生管理", // 设置页面标题
+});
 // 数据状态
 const students = ref<Student[]>([]);
 const classes = ref<Class[]>([]);
