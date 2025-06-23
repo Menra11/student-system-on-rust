@@ -1,11 +1,10 @@
 <template>
   <div>
-    <NuxtLink to="/">返回主页</NuxtLink>
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold mb-6">学生列表</h1>
 
       <!-- 搜索和过滤区域 -->
-      <!-- <div class="mb-6 flex justify-between items-center">
+      <div class="mb-6 flex justify-between items-center">
         <div class="flex items-center space-x-4">
           <input
             v-model="searchQuery"
@@ -30,7 +29,7 @@
         >
           刷新数据
         </button>
-      </div> -->
+      </div>
 
       <!-- 数据表格 -->
       <div class="overflow-x-auto">
@@ -65,7 +64,7 @@
               <td class="py-3 px-4 border-b">{{ student.phone }}</td>
               <td class="py-3 px-4 border-b">{{ student.email }}</td>
               <td class="py-3 px-4 border-b">
-                <button
+                <!-- <button
                   @click="viewStudent(student.student_id)"
                   class="text-blue-500 hover:text-blue-700 mr-2"
                 >
@@ -76,13 +75,14 @@
                   class="text-green-500 hover:text-green-700 mr-2"
                 >
                   编辑
-                </button>
+                </button> -->
                 <!-- <button
                   @click="deleteStudent(student.student_id)"
                   class="text-red-500 hover:text-red-700"
                 >
                   删除
                 </button> -->
+                操作
               </td>
             </tr>
           </tbody>
@@ -125,7 +125,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -152,46 +151,44 @@ const pagination = ref<Pagination>({
 
 // 获取学生数据
 const fetchStudents = async () => {
-  const { student, new_pagination } = await $fetch<StudentResponse>(
-    "/api/students",
-    {
-      method: "GET",
-      params: {
-        page: pagination.value.page,
-        limit: pagination.value.limit,
-      },
-    }
-  );
-  if (student && new_pagination) {
+  const { student } = await $fetch<StudentResponse>("/api/admin/students", {
+    method: "GET",
+  });
+  console.log(student);
+
+  // 获取班级数据
+  // const fetchClasses = async () => {
+  //   const { data } = await $fetch<ClassResponse>("/api/classes", {
+  //     method: "get",
+  //   });
+  //   if (data) {
+  //     classes.value = data;
+  //   }
+  // };
+
+  if (student) {
     students.value = student;
     pagination.value = {
-      page: new_pagination.page,
-      limit: new_pagination.limit,
-      total: new_pagination.total,
-      total_pages: new_pagination.total_pages,
+      page: pagination.value.page,
+      limit: pagination.value.limit,
+      total: student.length,
+      total_pages: Math.ceil(student.length / pagination.value.limit),
     };
   }
 };
-
-// 获取班级数据
-// const fetchClasses = async () => {
-//   const { data } = await $fetch<ClassResponse>("/api/classes", {
-//     method: "get",
-//   });
-//   if (data) {
-//     classes.value = data;
-//   }
-// };
-
 // 过滤后的学生数据
 const filteredStudents = computed(() => {
-  let result = students.value;
-
+  let result = students.value.slice(
+    (pagination.value.page - 1) * pagination.value.limit,
+    Math.min(
+      pagination.value.page * pagination.value.limit,
+      pagination.value.total
+    )
+  );
   // 按班级过滤
   if (classFilter.value) {
     result = result.filter((s) => s.class_id === Number(classFilter.value));
   }
-
   // 按搜索词过滤
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
@@ -259,13 +256,13 @@ const formatDate = (dateString: string) => {
 };
 
 // 操作函数
-const viewStudent = (id: number) => {
-  navigateTo(`/student/${id}`);
-};
+// const viewStudent = (id: number) => {
+//   navigateTo(`/student/${id}`);
+// };
 
-const editStudent = (id: number) => {
-  navigateTo(`/student/${id}/edit`);
-};
+// const editStudent = (id: number) => {
+//   navigateTo(`/student/${id}/edit`);
+// };
 
 // const deleteStudent = async (id: number) => {
 //   if (confirm("确定要删除这个学生吗？")) {

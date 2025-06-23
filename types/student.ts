@@ -24,7 +24,6 @@ export interface Pagination {
 
 export interface StudentResponse {
   student: Student[];
-  new_pagination: Pagination;
 }
 
 export interface ClassResponse {

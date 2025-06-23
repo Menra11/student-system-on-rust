@@ -8,17 +8,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (publicRoutes.includes(to.path)) {
     return;
   }
-  let token: string | undefined;
-  if (import.meta.server) {
-    token = document.cookie;
-  }
-  // 客户端环境下从 localStorage 获取 token
-  if (import.meta.client) {
-    token = localStorage.getItem("token");
-  }
-  if (token) {
-    userStore.setToken(token);
-  }
+  console.log(userStore.user);
   // 检查 token 是否存在
   if (!userStore.user.token) {
     // 保存原始目标路径，登录后可以重定向回去
