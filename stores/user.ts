@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import type { Student, Score, StudentGet } from "~/types/student";
+import type { StudentGet } from "~/types/student";
 import type { TeacherGet } from "~/types/teacher";
+import type { AdminResponse } from "~/types/admin/admin";
 
 export const useMyUserStore = defineStore("myUserStore", {
   state: () => ({
@@ -19,8 +20,12 @@ export const useMyUserStore = defineStore("myUserStore", {
         localStorage.setItem("token", token);
       }
     },
-    clearToken() {
+    clearUser() {
+      this.user.id = null;
+      this.user.name = "";
+      this.user.user_type = "";
       this.user.token = null;
+      this.user.selectedCourses = [];
       if (import.meta.client) {
         localStorage.removeItem("token");
       }
@@ -46,7 +51,13 @@ export const useMyUserStore = defineStore("myUserStore", {
         );
         this.user.name = Teacher[0].teacher_name;
       } else if (user === "admin") {
-        
+        const { Admin } = await $fetch<AdminResponse>(
+          `/api/admin/${id}`,
+          {
+            method: "GET",
+          }
+        );
+        this.user.name = Admin.admin_name;
       }
 
       this.user.id = id;
