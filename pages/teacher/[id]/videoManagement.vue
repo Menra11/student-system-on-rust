@@ -481,11 +481,10 @@ const updateVideoList = async () => {
     }
   );
   videoForm.value = Videos;
-  console.log(videoForm.value);
 };
-// onUpdated(() => {
-//   updateVideoList();
-// });
+onUpdated(() => {
+  updateVideoList();
+});
 onMounted(() => {
   updateVideoList();
 });
