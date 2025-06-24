@@ -21,6 +21,14 @@
             <span class="bg-blue-900 px-2 py-0.5 rounded-full">
               {{ formatUserType(userStore.user.user_type) }}
             </span>
+            <NuxtLink
+            to="/login"
+            class="px-5 py-3 border border-gray-200 rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 ml-auto"
+            @click="logout"
+          >
+            <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="mr-2" />
+            退出登录
+          </NuxtLink>
           </div>
         </div>
       </div>
@@ -43,6 +51,11 @@ const formatUserType = (type: string) => {
     default:
       return type;
   }
+};
+
+const logout = () => {
+  userStore.clearUser();
+  navigateTo("/login");
 };
 </script>
 

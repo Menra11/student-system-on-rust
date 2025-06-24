@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-blue-50">
     <Header />
 
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
       <!-- 导航卡片 -->
       <div class="bg-white rounded-2xl shadow-blue overflow-hidden mb-8">
         <div class="bg-gradient-to-r from-blue-600 to-blue-700 py-4 px-6">
@@ -45,15 +45,6 @@
             <font-awesome-icon :icon="['fas', 'user-circle']" class="mr-2" />
             视频管理
           </NuxtLink>
-
-          <NuxtLink
-            to="/login"
-            class="px-5 py-3 border border-gray-200 rounded-lg transition-all duration-300 flex items-center font-medium text-gray-700 hover:bg-blue-50 hover:border-blue-300 ml-auto"
-            @click="logout"
-          >
-            <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="mr-2" />
-            退出登录
-          </NuxtLink>
         </nav>
       </div>
 
@@ -83,10 +74,7 @@ import Header from "@/components/Header.vue";
 import { useMyUserStore } from "@/stores/user";
 const userStore = useMyUserStore();
 
-const logout = () => {
-  userStore.clearUser();
-  navigateTo("/login");
-};
+
 </script>
 
 <style scoped>
