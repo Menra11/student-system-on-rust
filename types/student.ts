@@ -20,8 +20,11 @@ export interface Pagination {
   total_pages: number;
 }
 
+export interface StudentsResponse {
+  Students: Student[];
+}
 export interface StudentResponse {
-  Student: Student[];
+  Student: Student;
 }
 
 export interface ClassResponse {

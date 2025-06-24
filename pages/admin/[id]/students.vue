@@ -76,25 +76,18 @@
                 {{ student.email }}
               </td>
               <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
-                <!-- <button
-                  @click="viewStudent(student.student_id)"
-                  class="text-blue-500 hover:text-blue-700 mr-2"
-                >
-                  查看
-                </button>
                 <button
-                  @click="editStudent(student.student_id)"
-                  class="text-green-500 hover:text-green-700 mr-2"
+                  @click="openEditDialog(student)"
+                  class="text-green-500 hover:text-green-700 mr-3 transition-colors"
                 >
                   编辑
-                </button> -->
+                </button>
                 <!-- <button
-                  @click="deleteStudent(student.student_id)"
-                  class="text-red-500 hover:text-red-700"
+                  @click="openDeleteDialog(student)"
+                  class="text-red-500 hover:text-red-700 transition-colors"
                 >
                   删除
                 </button> -->
-                操作
               </td>
             </tr>
           </tbody>
@@ -136,6 +129,245 @@
           </button>
         </div>
       </div>
+
+      <!-- 加载状态 -->
+      <div
+        v-if="isLoading"
+        class="fixed inset-0 bg-black/50 bg-opacity-30 flex items-center justify-center z-50"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center">
+            <div
+              class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"
+            ></div>
+            <span class="ml-3 text-lg">加载中...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 编辑模态框 -->
+      <!-- v-if="isEditDialogOpen" -->
+      <div
+        v-if="isEditDialogOpen"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      >
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+          <div
+            class="flex justify-between items-center rounded-t-2xl bg-blue-700"
+          >
+            <!-- 头部装饰 -->
+            <div class="pl-6 py-6 text-center">
+              <h1 class="text-2xl font-bold text-white">
+                <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />
+                编辑学生信息
+              </h1>
+            </div>
+            <button
+              @click="closeEditDialog"
+              class="pr-6 text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />
+            </button>
+          </div>
+          <form class="p-4" @submit.prevent="updateStudent">
+            <div class="flex flex-row flex-wrap">
+              <!-- 学号 -->
+              <div class="basis-1/2 p-2">
+                <label
+                  class="block text-gray-700 text-sm font-medium mb-2"
+                  for="student_id"
+                >
+                  <font-awesome-icon :icon="['fas', 'id-card']" class="mr-1" />
+                  学号
+                </label>
+                <input
+                  id="student_id"
+                  v-model="currentStudent.student_id"
+                  type="text"
+                  class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  disabled
+                />
+              </div>
+              <!-- 姓名 -->
+              <div class="basis-1/2 p-2">
+                <label
+                  class="block text-gray-700 text-sm font-medium mb-2"
+                  for="student_name"
+                >
+                  <font-awesome-icon :icon="['fas', 'user']" class="mr-1" />
+                  姓名
+                </label>
+                <input
+                  id="student_name"
+                  v-model="currentStudent.student_name"
+                  type="text"
+                  class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <!-- 性别 -->
+              <div class="basis-1/2 p-2">
+                <label class="block text-gray-700 text-sm font-medium mb-2">
+                  <font-awesome-icon
+                    :icon="['fas', 'venus-mars']"
+                    class="mr-1"
+                  />
+                  性别
+                </label>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <!-- 男性选项 -->
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="男"
+                      v-model="currentStudent.gender"
+                      class="hidden"
+                    />
+                    <div class="flex flex-col items-center">
+                      <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center text-xl transition-all duration-300"
+                        :class="
+                          currentStudent.gender === '男'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-blue-100 text-blue-600'
+                        "
+                      >
+                        <font-awesome-icon :icon="['fas', 'mars']" />
+                      </div>
+                    </div>
+                  </label>
+                  <!-- 女性选项 -->
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="女"
+                      v-model="currentStudent.gender"
+                      class="hidden"
+                    />
+                    <div class="flex flex-col items-center">
+                      <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center text-xl transition-all duration-300"
+                        :class="
+                          currentStudent.gender === '女'
+                            ? 'bg-pink-500 text-white'
+                            : 'bg-pink-100 text-pink-600'
+                        "
+                      >
+                        <font-awesome-icon :icon="['fas', 'venus']" />
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <!-- 出生日期 -->
+              <div class="basis-1/2 p-2">
+                <label
+                  class="block text-gray-700 text-sm font-medium mb-2"
+                  for="birth_date"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'calendar-days']"
+                    class="mr-1"
+                  />
+                  出生日期
+                </label>
+                <input
+                  id="birth_date"
+                  v-model="currentStudent.birth_date"
+                  type="date"
+                  class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <!-- 班级 -->
+              <div class="basis-1/2 p-2">
+                <label
+                  class="block text-gray-700 text-sm font-medium mb-2"
+                  for="class_name"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'graduation-cap']"
+                    class="mr-1"
+                  />
+                  选择班级
+                </label>
+                <select
+                  v-model="currentStudent.class_id"
+                  class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option
+                    v-for="cls in classes"
+                    :key="cls.class_id"
+                    :value="cls.class_id"
+                  >
+                    {{ cls.class_name }}
+                  </option>
+                </select>
+              </div>
+              <!-- 电话 -->
+              <div class="basis-1/2 p-2">
+                <label
+                  class="block text-gray-700 text-sm font-medium mb-2"
+                  for="phone"
+                >
+                  <font-awesome-icon :icon="['fas', 'phone']" class="mr-1" />
+                  联系电话
+                </label>
+                <input
+                  id="phone"
+                  v-model="currentStudent.phone"
+                  type="tel"
+                  class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="请输入手机号码"
+                />
+              </div>
+              <!-- 邮箱 -->
+              <div class="basis-1/1 p-2">
+                <label
+                  class="block text-gray-700 text-sm font-medium mb-2"
+                  for="email"
+                >
+                  <font-awesome-icon :icon="['fas', 'envelope']" class="mr-1" />
+                  电子邮箱
+                </label>
+                <input
+                  v-model="currentStudent.email"
+                  type="email"
+                  class="w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="example@domain.com"
+                />
+              </div>
+            </div>
+            <!-- 按钮 -->
+            <div class="mt-6 flex justify-end space-x-3">
+              <button
+                type="button"
+                @click="closeEditDialog"
+                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                type="submit"
+                :disabled="isUpdating"
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <span v-if="isUpdating" class="flex items-center">
+                  <font-awesome-icon
+                    :icon="['fas', 'spinner']"
+                    class="animate-spin mr-2"
+                  />
+                  保存中...
+                </span>
+                <span v-else> 保存 </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -145,7 +377,7 @@ import type {
   Student,
   Class,
   Pagination,
-  StudentResponse,
+  StudentsResponse,
   ClassResponse,
 } from "~/types/student";
 
@@ -168,6 +400,48 @@ const viewPagination = ref<Pagination>({
   total_pages: 1,
 });
 
+// 加载状态
+const isLoading = ref(false);
+const isUpdating = ref(false);
+const isDeleting = ref(false);
+
+// 编辑和删除状态
+const isEditDialogOpen = ref(false);
+const isDeleteDialogOpen = ref(false);
+const currentStudent = ref<Student>({
+  student_id: 0,
+  student_name: "",
+  gender: "男",
+  birth_date: "",
+  class_id: 0,
+  class_name: "",
+  phone: "",
+  email: "",
+});
+
+// 通知状态
+const notification = ref({
+  show: false,
+  message: "",
+  type: "success", // 'success' or 'error'
+});
+
+// 显示通知
+const showNotification = (
+  message: string,
+  type: "success" | "error" = "success"
+) => {
+  notification.value = {
+    show: true,
+    message,
+    type,
+  };
+
+  setTimeout(() => {
+    notification.value.show = false;
+  }, 3000);
+};
+
 // 获取班级数据
 const fetchClasses = async () => {
   const { Classes } = await $fetch<ClassResponse>("/api/admin/classes", {
@@ -180,11 +454,11 @@ const fetchClasses = async () => {
 
 // 获取学生数据
 const fetchStudents = async () => {
-  const { Student } = await $fetch<StudentResponse>("/api/admin/students", {
+  const { Students } = await $fetch<StudentsResponse>("/api/admin/students", {
     method: "GET",
   });
-  if (Student) {
-    students.value = Student;
+  if (Students) {
+    students.value = Students;
     pagination.value = {
       total: students.value.length,
       total_pages: Math.ceil(students.value.length / limit.value),
@@ -216,14 +490,10 @@ const filteredStudents = computed(() => {
         (s.email && s.email.toLowerCase().includes(query))
     );
   }
-  console.log(result);
-
   return result;
 });
 watchEffect(() => {
   const result = filteredStudents.value;
-  console.log("watch", result);
-
   viewPagination.value = {
     total: result.length,
     total_pages: Math.ceil(result.length / limit.value),
@@ -277,31 +547,65 @@ const goToPage = (pageNum: number | string) => {
 const formatDate = (dateString: string) => {
   if (!dateString) return "";
   const date = new Date(dateString);
-  return date.toLocaleDateString("zh-CN");
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}/${month}/${day}`;
 };
-
-// 操作函数
-// const viewStudent = (id: number) => {
-//   navigateTo(`/student/${id}`);
-// };
-
-// const editStudent = (id: number) => {
-//   navigateTo(`/student/${id}/edit`);
-// };
-
-// const deleteStudent = async (id: number) => {
-//   if (confirm("确定要删除这个学生吗？")) {
-//     await $fetch(`/api/students/${id}`, {
-//       method: "DELETE",
-//     });
-//     refreshData();
-//   }
-// };
 
 const refreshData = () => {
   fetchStudents();
   fetchClasses();
 };
+
+// 打开编辑对话框
+const openEditDialog = (student: Student) => {
+  currentStudent.value = { ...student };
+  currentStudent.value.birth_date = formatDate(student.birth_date).replace(
+    /\//g,
+    "-"
+  );
+  isEditDialogOpen.value = true;
+};
+
+// 关闭编辑对话框
+const closeEditDialog = () => {
+  isEditDialogOpen.value = false;
+  isUpdating.value = false;
+};
+
+// 更新学生信息
+const updateStudent = async () => {
+  isUpdating.value = true;
+
+  try {
+    // 发送更新请求
+    const response = await $fetch(
+      `/api/student/${currentStudent.value.student_id}`,
+      {
+        method: "PUT",
+        body: {Student: currentStudent.value} ,
+      }
+    );
+    console.log(response);
+
+    if (response.success) {
+      showNotification("学生信息更新成功");
+      closeEditDialog();
+    } else {
+      showNotification(`更新失败: ${response.message || "未知错误"}`, "error");
+    }
+  } catch (error) {
+    console.error("更新学生信息失败:", error);
+    showNotification(`更新失败: ${error.message || "未知错误"}`, "error");
+  } finally {
+    isUpdating.value = false;
+  }
+};
+
+onUpdated(() => {
+  fetchStudents();
+})
 
 // 初始化
 onMounted(() => {
