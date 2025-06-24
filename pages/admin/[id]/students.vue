@@ -32,50 +32,49 @@
       <!-- 数据表格 -->
       <div class="overflow-x-auto rounded-lg shadow">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-blue-50" align="center" valign="middle">
+          <thead class="bg-blue-50"  align="center" valign="middle">
             <tr>
-              <th class="px-2 py-2 text-sm text-blue-700">学号</th>
-              <th class="px-2 py-2 text-sm text-blue-700">姓名</th>
-              <th class="px-2 py-2 text-sm text-blue-700">性别</th>
-              <th class="px-2 py-2 text-sm text-blue-700">出生日期</th>
-              <th class="px-2 py-2 text-sm text-blue-700">班级</th>
-              <th class="px-2 py-2 text-sm text-blue-700">电话</th>
-              <th class="px-2 py-2 text-sm text-blue-700">邮箱</th>
-              <th class="px-2 py-2 text-sm text-blue-700">操作</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">学号</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">姓名</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">性别</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">出生日期</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">班级</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">电话</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">邮箱</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">操作</th>
             </tr>
           </thead>
           <tbody
             class="bg-white divide-y divide-gray-200"
-            align="center"
-            valign="middle"
+             align="center" valign="middle"
           >
             <tr
               v-for="student in filteredStudents"
               :key="student.student_id"
               class="hover:bg-blue-50 transition-colors"
             >
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.student_id }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.student_name }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.gender }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ formatDate(student.birth_date) }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2  text-sm text-gray-800">
                 {{ student.class_name }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.phone }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.email }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 <button
                   @click="openEditDialog(student)"
                   class="text-green-500 hover:text-green-700 mr-3 transition-colors"
@@ -615,20 +614,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 可以添加一些自定义样式 */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
 
-th,
-td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-tr:hover {
-  background-color: #f7fafc;
-}
 </style>
