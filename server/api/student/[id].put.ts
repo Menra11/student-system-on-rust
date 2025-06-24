@@ -34,5 +34,5 @@ WHERE student_id = ?;
   return {
       success: true,
       message: "更改成功",
-    };;
+    };
 });

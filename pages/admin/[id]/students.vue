@@ -32,21 +32,38 @@
       <!-- 数据表格 -->
       <div class="overflow-x-auto rounded-lg shadow">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-blue-50"  align="center" valign="middle">
+          <thead class="bg-blue-50" align="center" valign="middle">
             <tr>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">学号</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">姓名</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">性别</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">出生日期</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">班级</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">电话</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">邮箱</th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">操作</th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                学号
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                姓名
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                性别
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                出生日期
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                班级
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                电话
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                邮箱
+              </th>
+              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
+                操作
+              </th>
             </tr>
           </thead>
           <tbody
             class="bg-white divide-y divide-gray-200"
-             align="center" valign="middle"
+            align="center"
+            valign="middle"
           >
             <tr
               v-for="student in filteredStudents"
@@ -65,7 +82,7 @@
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ formatDate(student.birth_date) }}
               </td>
-              <td class="px-3 py-2  text-sm text-gray-800">
+              <td class="px-3 py-2 text-sm text-gray-800">
                 {{ student.class_name }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
@@ -81,12 +98,12 @@
                 >
                   编辑
                 </button>
-                <!-- <button
+                <button
                   @click="openDeleteDialog(student)"
                   class="text-red-500 hover:text-red-700 transition-colors"
                 >
                   删除
-                </button> -->
+                </button>
               </td>
             </tr>
           </tbody>
@@ -136,16 +153,16 @@
       >
         <div class="bg-white p-6 rounded-lg shadow-lg">
           <div class="flex items-center">
-            <div
-              class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"
-            ></div>
+            <font-awesome-icon
+              :icon="['fas', 'spinner']"
+              class="animate-spin mr-2"
+            />
             <span class="ml-3 text-lg">加载中...</span>
           </div>
         </div>
       </div>
 
       <!-- 编辑模态框 -->
-      <!-- v-if="isEditDialogOpen" -->
       <div
         v-if="isEditDialogOpen"
         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
@@ -165,7 +182,7 @@
               @click="closeEditDialog"
               class="pr-6 text-gray-500 hover:text-gray-700 transition-colors"
             >
-              <font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />
+              <font-awesome-icon :icon="['fas', 'times']" class="mr-2" />
             </button>
           </div>
           <form class="p-4" @submit.prevent="updateStudent">
@@ -365,6 +382,96 @@
               </button>
             </div>
           </form>
+        </div>
+      </div>
+
+      <!-- 删除确认模态框 -->
+      <div
+        v-if="isDeleteDialogOpen"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300"
+      >
+        <div
+          class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 transform transition-transform duration-300 scale-100"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">删除确认</h3>
+            <button
+              @click="closeDeleteDialog"
+              class="text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <font-awesome-icon :icon="['fas', 'times']" class="mr-2" />
+            </button>
+          </div>
+
+          <p class="mb-6 text-gray-700">
+            确定要删除学生
+            <span class="font-semibold">{{ currentStudent.student_name }}</span>
+            (学号: {{ currentStudent.student_id }}) 吗？此操作不可逆。
+          </p>
+
+          <div class="flex justify-end space-x-3">
+            <button
+              @click="closeDeleteDialog"
+              class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              @click="confirmDelete"
+              :disabled="isDeleting"
+              class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <span v-if="isDeleting" class="flex items-center">
+                <font-awesome-icon
+                  :icon="['fas', 'spinner']"
+                  class="animate-spin mr-2"
+                />
+                删除中...
+              </span>
+              <span v-else> 确认删除 </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 通知消息 -->
+      <div v-if="notification.show" class="fixed top-4 right-4 z-50">
+        <div
+          :class="[
+            'px-4 py-3 rounded-lg shadow-lg text-white transition-all duration-300 transform',
+            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500',
+            notification.show ? 'translate-x-0' : 'translate-x-full',
+          ]"
+        >
+          <div class="flex items-center">
+            <svg
+              v-if="notification.type === 'success'"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ notification.message }}
+          </div>
         </div>
       </div>
     </div>
@@ -583,7 +690,7 @@ const updateStudent = async () => {
       `/api/student/${currentStudent.value.student_id}`,
       {
         method: "PUT",
-        body: {Student: currentStudent.value} ,
+        body: { Student: currentStudent.value },
       }
     );
     console.log(response);
@@ -602,9 +709,58 @@ const updateStudent = async () => {
   }
 };
 
+// 打开删除对话框
+const openDeleteDialog = (student: Student) => {
+  currentStudent.value = { ...student };
+  isDeleteDialogOpen.value = true;
+};
+
+// 关闭删除对话框
+const closeDeleteDialog = () => {
+  isDeleteDialogOpen.value = false;
+  isDeleting.value = false;
+};
+
+// 确认删除
+const confirmDelete = async () => {
+  isDeleting.value = true;
+
+  try {
+    // 发送删除请求
+    const response = await $fetch(
+      `/api/student/${currentStudent.value.student_id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.success) {
+      // 从本地数据中移除
+      students.value = students.value.filter(
+        (s) => s.student_id !== currentStudent.value.student_id
+      );
+
+      // 检查当前页是否还有数据
+      if (filteredStudents.value.length === 0 && page.value > 1) {
+        page.value--;
+      }
+
+      showNotification("学生删除成功");
+      closeDeleteDialog();
+    } else {
+      showNotification(`删除失败: ${response.message || "未知错误"}`, "error");
+    }
+  } catch (error: any) {
+    console.error("删除学生失败:", error);
+    showNotification(`删除失败: ${error.message || "未知错误"}`, "error");
+  } finally {
+    isDeleting.value = false;
+  }
+};
+
 onUpdated(() => {
   fetchStudents();
-})
+});
 
 // 初始化
 onMounted(() => {
@@ -613,6 +769,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
