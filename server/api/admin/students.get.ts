@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     `);
 
     return {
-      student: students,
+      Student: students,
     };
   } catch (error) {
     console.error("获取学生数据失败：", error);

@@ -44,23 +44,37 @@
               <th class="px-2 py-2 text-sm text-blue-700">操作</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200" align="center" valign="middle">
+          <tbody
+            class="bg-white divide-y divide-gray-200"
+            align="center"
+            valign="middle"
+          >
             <tr
               v-for="student in filteredStudents"
               :key="student.student_id"
               class="hover:bg-blue-50 transition-colors"
             >
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.student_id }}</td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.student_name }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+                {{ student.student_id }}
+              </td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+                {{ student.student_name }}
+              </td>
               <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.gender }}
               </td>
               <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ formatDate(student.birth_date) }}
               </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.class_name }}</td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.phone }}</td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">{{ student.email }}</td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+                {{ student.class_name }}
+              </td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+                {{ student.phone }}
+              </td>
+              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
+                {{ student.email }}
+              </td>
               <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-800">
                 <!-- <button
                   @click="viewStudent(student.student_id)"
@@ -90,14 +104,14 @@
       <!-- 分页控件 -->
       <div class="mt-6 flex justify-between items-center">
         <div>
-          显示 {{ (pagination.page - 1) * pagination.limit + 1 }} 到
-          {{ Math.min(pagination.page * pagination.limit, pagination.total) }}
-          条， 共 {{ pagination.total }} 条
+          显示 {{ viewPagination.total ? (page - 1) * limit + 1 : 0 }} 到
+          {{ Math.min(page * limit, viewPagination.total) }}
+          条， 共 {{ viewPagination.total }} 条
         </div>
         <div class="flex space-x-2">
           <button
             @click="prevPage"
-            :disabled="pagination.page === 1"
+            :disabled="page === 1"
             class="px-4 py-2 border rounded-md disabled:opacity-50"
           >
             上一页
@@ -108,14 +122,14 @@
             @click="goToPage(pageNum)"
             :class="[
               'px-4 py-2 border rounded-md',
-              pageNum === pagination.page ? 'bg-blue-500 text-white' : '',
+              pageNum === page ? 'bg-blue-500 text-white' : '',
             ]"
           >
             {{ pageNum }}
           </button>
           <button
             @click="nextPage"
-            :disabled="pagination.page === pagination.total_pages"
+            :disabled="page === pagination.total_pages"
             class="px-4 py-2 border rounded-md disabled:opacity-50"
           >
             下一页
@@ -143,48 +157,49 @@ const students = ref<Student[]>([]);
 const classes = ref<Class[]>([]);
 const searchQuery = ref("");
 const classFilter = ref("");
+const page = ref(1);
+const limit = ref(10);
 const pagination = ref<Pagination>({
-  page: 1,
-  limit: 10,
+  total: 0,
+  total_pages: 1,
+});
+const viewPagination = ref<Pagination>({
   total: 0,
   total_pages: 1,
 });
 
+// 获取班级数据
+const fetchClasses = async () => {
+  const { Classes } = await $fetch<ClassResponse>("/api/admin/classes", {
+    method: "get",
+  });
+  if (Classes) {
+    classes.value = Classes;
+  }
+};
+
 // 获取学生数据
 const fetchStudents = async () => {
-  const { student } = await $fetch<StudentResponse>("/api/admin/students", {
+  const { Student } = await $fetch<StudentResponse>("/api/admin/students", {
     method: "GET",
   });
-  console.log(student);
-
-  // 获取班级数据
-  // const fetchClasses = async () => {
-  //   const { data } = await $fetch<ClassResponse>("/api/classes", {
-  //     method: "get",
-  //   });
-  //   if (data) {
-  //     classes.value = data;
-  //   }
-  // };
-
-  if (student) {
-    students.value = student;
+  if (Student) {
+    students.value = Student;
     pagination.value = {
-      page: pagination.value.page,
-      limit: pagination.value.limit,
-      total: student.length,
-      total_pages: Math.ceil(student.length / pagination.value.limit),
+      total: students.value.length,
+      total_pages: Math.ceil(students.value.length / limit.value),
+    };
+    viewPagination.value = {
+      total: students.value.length,
+      total_pages: Math.ceil(students.value.length / limit.value),
     };
   }
 };
 // 过滤后的学生数据
 const filteredStudents = computed(() => {
   let result = students.value.slice(
-    (pagination.value.page - 1) * pagination.value.limit,
-    Math.min(
-      pagination.value.page * pagination.value.limit,
-      pagination.value.total
-    )
+    (page.value - 1) * limit.value,
+    Math.min(page.value * limit.value, pagination.value.total)
   );
   // 按班级过滤
   if (classFilter.value) {
@@ -201,14 +216,23 @@ const filteredStudents = computed(() => {
         (s.email && s.email.toLowerCase().includes(query))
     );
   }
+  console.log(result);
 
   return result;
 });
+watchEffect(() => {
+  const result = filteredStudents.value;
+  console.log("watch", result);
 
+  viewPagination.value = {
+    total: result.length,
+    total_pages: Math.ceil(result.length / limit.value),
+  };
+});
 // 分页相关
 const visiblePages = computed(() => {
   const pages = [];
-  const current = pagination.value.page;
+  const current = page.value;
   const total = pagination.value.total_pages;
 
   if (total <= 5) {
@@ -229,22 +253,22 @@ const visiblePages = computed(() => {
 });
 
 const prevPage = () => {
-  if (pagination.value.page > 1) {
-    pagination.value.page--;
+  if (page.value > 1) {
+    page.value--;
     fetchStudents();
   }
 };
 
 const nextPage = () => {
-  if (pagination.value.page < pagination.value.total_pages) {
-    pagination.value.page++;
+  if (page.value < pagination.value.total_pages) {
+    page.value++;
     fetchStudents();
   }
 };
 
 const goToPage = (pageNum: number | string) => {
   if (typeof pageNum === "number") {
-    pagination.value.page = pageNum;
+    page.value = pageNum;
     fetchStudents();
   }
 };
@@ -276,13 +300,13 @@ const formatDate = (dateString: string) => {
 
 const refreshData = () => {
   fetchStudents();
-  // fetchClasses();
+  fetchClasses();
 };
 
 // 初始化
 onMounted(() => {
   fetchStudents();
-  // fetchClasses();
+  fetchClasses();
 });
 </script>
 

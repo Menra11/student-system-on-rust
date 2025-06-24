@@ -11,23 +11,21 @@ export interface Student {
 }
 
 export interface Class {
-  class_id: number | string;
+  class_id: number;
   class_name: string;
 }
 
 export interface Pagination {
-  page: number;
-  limit: number;
   total: number;
   total_pages: number;
 }
 
 export interface StudentResponse {
-  student: Student[];
+  Student: Student[];
 }
 
 export interface ClassResponse {
-  data: Class[];
+  Classes: Class[];
 }
 
 // [id]
