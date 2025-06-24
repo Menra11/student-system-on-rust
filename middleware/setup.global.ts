@@ -20,7 +20,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   // 检查登录角色
   if (userStore.user.user_type) {
-    // 如果是admin角色，放行/admin路径下任意路径
+    // 如果是user_type角色，放行/user_type路径下任意路径
     if (to.path.startsWith(`/${userStore.user.user_type}`)) {
       return;
     }
