@@ -225,8 +225,10 @@
 <script lang="ts" setup>
 import type { loginData, LoginResponse } from "@/types/login";
 import { useMyUserStore } from "@/stores/user";
+import { useMyNotificationStore } from "@/stores/notification";
 const router = useRouter();
 const userStore = useMyUserStore();
+const notificationStore = useMyNotificationStore();
 // 收集输入的账户密码
 let loginData = reactive<loginData>({
   user_id: 2025001,
@@ -237,55 +239,7 @@ let loginData = reactive<loginData>({
 let loginForm = ref();
 const isLoading = ref(false);
 const errorMessage = ref("");
-// 登录的回调
-let useLogin = async () => {
-  errorMessage.value = "";
-  if (!validateForm()) return;
-  try {
-    isLoading.value = true;
-    const response = await $fetch<LoginResponse>("/api/login", {
-      method: "POST",
-      params: {
-        user_id: loginData.user_id,
-        password: loginData.password,
-        user: loginData.user,
-      },
-    });
-    console.log(response);
 
-    if (response.success) {
-      userStore.setToken(response.token);
-      await userStore.getUser(loginData.user_id,loginData.user);
-      
-      if (import.meta.server) {
-        // 设置cookie，有效期与token相同
-        document.cookie = `token=${response.token}; path=/; max-age=${
-          60 * 60 * 24
-        }`; // 1天
-      }
-      if (import.meta.client) {
-        localStorage.setItem("token", response.token);
-      }
-      if (loginData.user === "student") {
-        router.push(`/student/${loginData.user_id}`);
-      } else if (loginData.user === "teacher") {
-        router.push(`/teacher/${loginData.user_id}`);
-      } else if (loginData.user === "admin") {
-        router.push(`/admin/${loginData.user_id}`);
-      }
-    } else {
-      // 处理登录失败
-      handleLoginError(response);
-    }
-  } catch (error) {
-    console.log(error);
-
-    handleLoginError(error);
-  } finally {
-    // 重置加载状态
-    isLoading.value = false;
-  }
-};
 const validateForm = (): boolean => {
   if (!loginData.user_id.toString().trim()) {
     errorMessage.value = "用户ID不能为空";
@@ -348,7 +302,59 @@ const handleNetworkError = (error: any) => {
     errorMessage.value = "发生未知错误: " + error.message;
   }
 };
-let useRegister = () => {
+
+// 登录的回调
+const useLogin = async () => {
+  errorMessage.value = "";
+  if (!validateForm()) return;
+  try {
+    isLoading.value = true;
+    const response = await $fetch<LoginResponse>("/api/login", {
+      method: "POST",
+      params: {
+        user_id: loginData.user_id,
+        password: loginData.password,
+        user: loginData.user,
+      },
+    });
+    if (response.success) {
+      userStore.setToken(response.token);
+      await userStore.getUser(loginData.user_id, loginData.user);
+      notificationStore.notice={
+        show: true,
+        message: "登录成功",
+        type: "success",
+      }
+      if (import.meta.server) {
+        // 设置cookie，有效期与token相同
+        document.cookie = `token=${response.token}; path=/; max-age=${
+          60 * 60 * 24
+        }`; // 1天
+      }
+      if (import.meta.client) {
+        localStorage.setItem("token", response.token);
+      }
+      if (loginData.user === "student") {
+        router.push(`/student/${loginData.user_id}`);
+      } else if (loginData.user === "teacher") {
+        router.push(`/teacher/${loginData.user_id}`);
+      } else if (loginData.user === "admin") {
+        router.push(`/admin/${loginData.user_id}`);
+      }
+    } else {
+      // 处理登录失败
+      handleLoginError(response);
+    }
+  } catch (error) {
+    console.log(error);
+
+    handleNetworkError(error);
+  } finally {
+    // 重置加载状态
+    isLoading.value = false;
+  }
+};
+const useRegister = () => {
   router.push("/register");
 };
 </script>
