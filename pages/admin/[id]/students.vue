@@ -434,51 +434,13 @@
         </div>
       </div>
 
-      <!-- 通知消息 -->
-      <div v-if="notification.show" class="fixed top-4 right-4 z-50">
-        <div
-          :class="[
-            'px-4 py-3 rounded-lg shadow-lg text-white transition-all duration-300 transform',
-            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500',
-            notification.show ? 'translate-x-0' : 'translate-x-full',
-          ]"
-        >
-          <div class="flex items-center">
-            <svg
-              v-if="notification.type === 'success'"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            <svg
-              v-else
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            {{ notification.message }}
-          </div>
-        </div>
-      </div>
+      <Notice :notice-data="notice"  />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import Notice from "@/components/Notice.vue";
 import type {
   Student,
   Class,
@@ -514,37 +476,29 @@ const isDeleting = ref(false);
 // 编辑和删除状态
 const isEditDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
-const currentStudent = ref<Student>({
-  student_id: 0,
-  student_name: "",
-  gender: "男",
-  birth_date: "",
-  class_id: 0,
-  class_name: "",
-  phone: "",
-  email: "",
-});
+const currentStudent = ref<Student>();
 
-// 通知状态
-const notification = ref({
+const notice = ref<{
+  show: boolean;
+  message: string;
+  type: string;
+}>({
   show: false,
   message: "",
-  type: "success", // 'success' or 'error'
+  type: "",
 });
-
 // 显示通知
 const showNotification = (
   message: string,
   type: "success" | "error" = "success"
 ) => {
-  notification.value = {
+  notice.value = {
     show: true,
     message,
     type,
   };
-
   setTimeout(() => {
-    notification.value.show = false;
+    notice.value.show = false;
   }, 3000);
 };
 
