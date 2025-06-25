@@ -320,11 +320,11 @@ const useLogin = async () => {
     if (response.success) {
       userStore.setToken(response.token);
       await userStore.getUser(loginData.user_id, loginData.user);
-      notificationStore.notice={
+      notificationStore.setNotification({
         show: true,
         message: "登录成功",
         type: "success",
-      }
+      })
       if (import.meta.server) {
         // 设置cookie，有效期与token相同
         document.cookie = `token=${response.token}; path=/; max-age=${

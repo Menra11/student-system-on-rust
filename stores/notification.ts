@@ -10,7 +10,7 @@ export const useMyNotificationStore = defineStore("myNotificationStore", {
   }),
   actions: {
     // 设置通知
-    setNotification(show: boolean, message: string, type: 'success' | 'error') {
+    setNotification({show, message, type}: { show: boolean, message: string, type: 'success' | 'error' }) {
       this.notice = {
         show,
         message,
