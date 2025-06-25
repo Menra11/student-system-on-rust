@@ -321,11 +321,13 @@
       <div class="mt-6 text-center text-white text-sm">
         <p>© 2025 menra 学生管理系统</p>
       </div>
+      <Notice :notice-data="notice" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import Notice from "@/components/Notice.vue";
 import type { registerData } from "@/types/register";
 const router = useRouter();
 
@@ -344,6 +346,29 @@ const registerData = reactive<registerData>({
 const isLoading = ref(false);
 const errorMessage = ref("");
 
+const notice = ref<{
+  show: boolean;
+  message: string;
+  type: string;
+}>({
+  show: false,
+  message: "",
+  type: "",
+});
+// 显示通知
+const showNotification = (
+  message: string,
+  type: "success" | "error" = "success"
+) => {
+  notice.value = {
+    show: true,
+    message,
+    type,
+  };
+  setTimeout(() => {
+    notice.value.show = false;
+  }, 3000);
+};
 // 表单提交处理
 const handleSubmit = async () => {
   // 重置错误消息
@@ -360,13 +385,13 @@ const handleSubmit = async () => {
       method: "POST",
       params: registerData,
     });
-
+    showNotification("注册成功", "success");
     // 模拟注册成功
     setTimeout(() => {
       isLoading.value = false;
-      alert("注册成功！");
+
       router.push("/login");
-    }, 1500);
+    }, 3000);
   } catch (error) {
     console.error("注册失败:", error);
     errorMessage.value = "注册失败，请稍后再试";
