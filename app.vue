@@ -7,17 +7,16 @@
 
 <script setup lang="ts" >
 import Notice from "@/components/Notice.vue";
-import { useMyUserStore } from "@/stores/user";
 import { useMyNotificationStore } from "@/stores/notification";
-const userStore = useMyUserStore();
 const notificationStore = useMyNotificationStore();
 
 watch(
-  () => userStore.user.token,
-  (token) => {
-    if (token) {
-      notificationStore.showNotification("登录成功",'success');
+  () => notificationStore.notice.show,
+  (notice) => {
+    if (notice) {
+      notificationStore.showNotification(notificationStore.notice.message,notificationStore.notice.type);
     }
+    console.log(notice);
   }
 ); 
 </script>

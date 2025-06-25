@@ -5,16 +5,16 @@ export const useMyNotificationStore = defineStore("myNotificationStore", {
     notice: {
       show: false,
       message: "",
-      type: "",
+      type: 'success' as 'success' | 'error',
     },
   }),
   actions: {
     // 显示通知
-    showNotification(message: string, type: "success" | "error" = "success") {
+    showNotification(message: string, type: 'success' | 'error' = 'success') {
       this.notice = {
         show: true,
         message,
-        type,
+        type: type as 'success' | 'error',
       };
       setTimeout(() => {
         this.notice.show = false;
