@@ -40,7 +40,7 @@ export const useMyUserStore = defineStore("myUserStore", {
         );
         
         this.user.name = Student[0].student_name;
-        this.user.selectedCourses = Scores;
+        this.user.selectedCourses = Scores.map(score => score.course_name);
         
       } else if (user === "teacher") {
         const { Teacher } = await $fetch<TeacherGet>(
@@ -63,6 +63,10 @@ export const useMyUserStore = defineStore("myUserStore", {
       this.user.id = id;
       this.user.user_type = user;
     },
+
+    flashCourses(courses: any) {
+      this.user.selectedCourses.push(...courses);
+    }
   },
   persist: true,
 });

@@ -273,7 +273,7 @@ const getCourses = async () => {
   courses.value = courses.value.filter(
     (course) =>
       !userStore.user.selectedCourses.some(
-        (selectedCourse) => selectedCourse.course_name === course.course_name
+        (selectedCourse) => selectedCourse === course.course_name
       )
   );
 };
@@ -359,18 +359,20 @@ const submitSelection = async () => {
 
   try {
     isSubmitting.value = true;
-    
-    const response = await $fetch(`/api/student/${route.params.id}/select-courses`, {
-      method: 'POST',
-      params: {
-        courses: selectedCourses.value.map(c => c.course_id)
+
+    const response = await $fetch(
+      `/api/student/${route.params.id}/select-courses`,
+      {
+        method: "POST",
+        params: {
+          courses: selectedCourses.value.map((c) => c.course_id),
+        },
       }
-    });
-    console.log(response);
-    
+    );
     await new Promise((resolve) => setTimeout(resolve, 1000));
     alert("选课成功！");
-    navigateTo('/student/'+userStore.user.id+'' )
+    userStore.flashCourses(selectedCourses.value.map((c) => c.course_name))
+    navigateTo("/student/" + userStore.user.id + "");
   } catch (error) {
     console.error("选课失败:", error);
     alert("选课失败，请稍后再试");
@@ -379,13 +381,9 @@ const submitSelection = async () => {
   }
 };
 
-// 初始化加载选课数据
 onMounted(() => {
-  // 实际项目中从API加载课程数据
   getCourses();
   getTeachers();
-  // 实际项目中加载已选课程
-  // selectedCourses.value = await $fetch(`/api/selected-courses/${userStore.user.id}`);
 });
 </script>
 
