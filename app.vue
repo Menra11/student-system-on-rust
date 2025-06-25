@@ -14,9 +14,8 @@ watch(
   () => notificationStore.notice.show,
   (notice) => {
     if (notice) {
-      notificationStore.showNotification(notificationStore.notice.message,notificationStore.notice.type);
+      notificationStore.showNotification();
     }
-    console.log(notice);
   }
 ); 
 </script>

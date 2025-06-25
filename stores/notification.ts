@@ -9,13 +9,16 @@ export const useMyNotificationStore = defineStore("myNotificationStore", {
     },
   }),
   actions: {
-    // 显示通知
-    showNotification(message: string, type: 'success' | 'error' = 'success') {
+    // 设置通知
+    setNotification(show: boolean, message: string, type: 'success' | 'error') {
       this.notice = {
-        show: true,
+        show,
         message,
-        type: type as 'success' | 'error',
+        type,
       };
+    },
+    // 显示通知
+    showNotification() {
       setTimeout(() => {
         this.notice.show = false;
       }, 3000);
