@@ -366,7 +366,6 @@ const handleSubmit = async () => {
     });
 
     notificationStore.setNotification({
-      show: true,
       message: "注册成功",
       type: "success",
     });
@@ -375,7 +374,7 @@ const handleSubmit = async () => {
       isLoading.value = false;
       router.push("/login");
     }, 1500);
-    
+
   } catch (error) {
     console.error("注册失败:", error);
     errorMessage.value = "注册失败，请稍后再试";

@@ -118,9 +118,7 @@
 
               <div>
                 <h4 class="text-sm font-medium text-gray-500">完成率</h4>
-                <p class="font-medium text-blue-600">
-                  {{ completionRate}}%
-                </p>
+                <p class="font-medium text-blue-600">{{ completionRate }}%</p>
               </div>
             </div>
           </div>
@@ -132,6 +130,7 @@
 
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
+import { useMyNotificationStore } from "~/stores/notification";
 import type { VideoGet, VideoResponse, Progress } from "@/types/video";
 definePageMeta({
   title: "课程视频", // 设置页面标题
@@ -139,6 +138,7 @@ definePageMeta({
 const route = useRoute();
 const router = useRouter();
 const userStore = useMyUserStore();
+const notificationStore = useMyNotificationStore();
 
 // 视频播放器引用
 const videoPlayer = ref<HTMLVideoElement | null>(null);
@@ -177,7 +177,7 @@ const goBack = () => {
 // 完成率计算
 const completionRate = computed(() => {
   if (videoData.value.video_duration === 0) return 0;
-  
+
   return Math.min(
     100,
     Math.round((watchedTime.value / videoData.value.video_duration) * 100)
@@ -250,17 +250,25 @@ const videoEnded = async () => {
   );
   const completed = completionRate == 100 ? 1 : 0;
   const progress = watchedTime.value / videoData.value.video_duration;
-  const res = await $fetch<VideoGet>(`/api/student/${route.params.id}/course-video/${route.params.videoId}`, {
-    method: "post",
-    params: {
-      id: route.params.videoId,
-      student_id: userStore.user.id,
-      completed:completed,
-      progress:progress
-    },
-  });
-  console.log(res);
-  
+
+  if (progress != progressData.value.progress) {
+    notificationStore.setNotification({
+      message: "观看时长已记录",
+      type: "success",
+    });
+  }
+  const res = await $fetch<VideoGet>(
+    `/api/student/${route.params.id}/course-video/${route.params.videoId}`,
+    {
+      method: "post",
+      params: {
+        id: route.params.videoId,
+        student_id: userStore.user.id,
+        completed: completed,
+        progress: progress,
+      },
+    }
+  );
 };
 
 // 加载视频
@@ -282,21 +290,26 @@ watch(
   },
   { immediate: true }
 );
+
 onMounted(async () => {
-  
-  const res = await $fetch<VideoGet>(`/api/student/${route.params.id}/course-video/${route.params.videoId}`, {
-    method: "GET",
-  });
+  const res = await $fetch<VideoGet>(
+    `/api/student/${route.params.id}/course-video/${route.params.videoId}`,
+    {
+      method: "GET",
+    }
+  );
   videoData.value = res.video[0];
   progressData.value = res.progress[0];
-  watchedTime.value = progressData.value.progress * videoData.value.video_duration;
+  watchedTime.value =
+    progressData.value.progress * videoData.value.video_duration;
 });
-// 组件卸载时清除计时器
+
+// 组件卸载
 onUnmounted(() => {
   if (timerInterval.value) {
     clearInterval(timerInterval.value);
   }
-  videoEnded()
+  videoEnded();
 });
 </script>
 

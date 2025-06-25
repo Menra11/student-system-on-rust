@@ -5,14 +5,20 @@ export const useMyNotificationStore = defineStore("myNotificationStore", {
     notice: {
       show: false,
       message: "",
-      type: 'success' as 'success' | 'error',
+      type: "success" as "success" | "error",
     },
   }),
   actions: {
     // 设置通知
-    setNotification({show, message, type}: { show: boolean, message: string, type: 'success' | 'error' }) {
+    setNotification({
+      message,
+      type,
+    }: {
+      message: string;
+      type: "success" | "error";
+    }) {
       this.notice = {
-        show,
+        show: true,
         message,
         type,
       };

@@ -433,14 +433,14 @@
           </div>
         </div>
       </div>
-
-      <Notice :notice-data="notice"  />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Notice from "@/components/Notice.vue";
+import { useMyNotificationStore } from "@/stores/notification";
+
+const notificationStore = useMyNotificationStore();
 import type {
   Student,
   Class,
@@ -477,30 +477,6 @@ const isDeleting = ref(false);
 const isEditDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 const currentStudent = ref<Student>();
-
-const notice = ref<{
-  show: boolean;
-  message: string;
-  type: string;
-}>({
-  show: false,
-  message: "",
-  type: "",
-});
-// 显示通知
-const showNotification = (
-  message: string,
-  type: "success" | "error" = "success"
-) => {
-  notice.value = {
-    show: true,
-    message,
-    type,
-  };
-  setTimeout(() => {
-    notice.value.show = false;
-  }, 3000);
-};
 
 // 获取班级数据
 const fetchClasses = async () => {
@@ -650,14 +626,23 @@ const updateStudent = async () => {
     console.log(response);
 
     if (response.success) {
-      showNotification("学生信息更新成功");
+      notificationStore.setNotification({
+        message: "学生信息更新成功",
+        type: "success",
+      });
       closeEditDialog();
     } else {
-      showNotification(`更新失败: ${response.message || "未知错误"}`, "error");
+      notificationStore.setNotification({
+        message: `更新失败: ${response.message || "未知错误"}`,
+        type: "error",
+      });
     }
   } catch (error) {
     console.error("更新学生信息失败:", error);
-    showNotification(`更新失败: ${error.message || "未知错误"}`, "error");
+    notificationStore.setNotification({
+      message: `更新失败: ${error.message || "未知错误"}`,
+      type: "error",
+    });
   } finally {
     isUpdating.value = false;
   }
@@ -699,14 +684,23 @@ const confirmDelete = async () => {
         page.value--;
       }
 
-      showNotification("学生删除成功");
+      notificationStore.setNotification({
+      message: '学生删除成功',
+      type: "success",
+    });
       closeDeleteDialog();
     } else {
-      showNotification(`删除失败: ${response.message || "未知错误"}`, "error");
+      notificationStore.setNotification({
+      message: `更新失败: ${response.message || "未知错误"}`,
+      type: "error",
+    });
     }
   } catch (error: any) {
     console.error("删除学生失败:", error);
-    showNotification(`删除失败: ${error.message || "未知错误"}`, "error");
+    notificationStore.setNotification({
+      message: `更新失败: ${error.message || "未知错误"}`,
+      type: "error",
+    });
   } finally {
     isDeleting.value = false;
   }

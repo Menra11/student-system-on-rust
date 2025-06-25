@@ -321,7 +321,6 @@ const useLogin = async () => {
       userStore.setToken(response.token);
       await userStore.getUser(loginData.user_id, loginData.user);
       notificationStore.setNotification({
-        show: true,
         message: "登录成功",
         type: "success",
       })

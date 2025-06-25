@@ -227,17 +227,21 @@
 </template>
 
 <script setup lang="ts">
-import { useMyUserStore } from "@/stores/user";
 import type { Course } from "@/types/course";
 import type { Teacher } from "@/types/teacher";
+
+import { useMyUserStore } from "@/stores/user";
+import { useMyNotificationStore } from "@/stores/notification";
+
+const route = useRoute();
+const router = useRouter();
+
+const userStore = useMyUserStore();
+const notificationStore = useMyNotificationStore();
 
 definePageMeta({
   title: "课程选择",
 });
-const route = useRoute();
-const router = useRouter();
-const userStore = useMyUserStore();
-
 // 模拟教师数据
 const teachers = ref<Teacher[]>([{ teacher_id: null, teacher_name: "" }]);
 
@@ -370,12 +374,18 @@ const submitSelection = async () => {
       }
     );
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert("选课成功！");
-    userStore.flashCourses(selectedCourses.value.map((c) => c.course_name))
+    notificationStore.setNotification({
+      message: "选课成功",
+      type: "success",
+    });
+    userStore.flashCourses(selectedCourses.value.map((c) => c.course_name));
     navigateTo("/student/" + userStore.user.id + "");
   } catch (error) {
     console.error("选课失败:", error);
-    alert("选课失败，请稍后再试");
+    notificationStore.setNotification({
+      message: "选课失败，请稍后再试",
+      type: "error",
+    });
   } finally {
     isSubmitting.value = false;
   }
