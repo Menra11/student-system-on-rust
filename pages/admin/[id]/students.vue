@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container mx-auto px-4 py-8">
+    <div class=" mx-auto px-4 py-8">
       <!-- 搜索和过滤区域 -->
       <div class="mb-6 flex justify-between items-center">
         <div class="flex items-center space-x-4">
@@ -82,7 +82,7 @@
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ formatDate(student.birth_date) }}
               </td>
-              <td class="px-3 py-2 text-sm text-gray-800">
+              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ student.class_name }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
@@ -92,6 +92,11 @@
                 {{ student.email }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
+                <NuxtLink
+                  :to="`/admin/${route.params.id}/${student.student_id}`"
+                  class="text-blue-500 hover:text-blue-700 mr-3 transition-colors"
+                  >查看</NuxtLink
+                >
                 <button
                   @click="openEditDialog(student)"
                   class="text-green-500 hover:text-green-700 mr-3 transition-colors"
@@ -440,7 +445,6 @@
 <script setup lang="ts">
 import { useMyNotificationStore } from "@/stores/notification";
 
-const notificationStore = useMyNotificationStore();
 import type {
   Student,
   Class,
@@ -449,9 +453,14 @@ import type {
   ClassResponse,
 } from "~/types/student";
 
+const route = useRoute();
+
+const notificationStore = useMyNotificationStore();
+
 definePageMeta({
   title: "学生管理", // 设置页面标题
 });
+
 // 数据状态
 const students = ref<Student[]>([]);
 const classes = ref<Class[]>([]);
@@ -685,15 +694,15 @@ const confirmDelete = async () => {
       }
 
       notificationStore.setNotification({
-      message: '学生删除成功',
-      type: "success",
-    });
+        message: "学生删除成功",
+        type: "success",
+      });
       closeDeleteDialog();
     } else {
       notificationStore.setNotification({
-      message: `更新失败: ${response.message || "未知错误"}`,
-      type: "error",
-    });
+        message: `更新失败: ${response.message || "未知错误"}`,
+        type: "error",
+      });
     }
   } catch (error: any) {
     console.error("删除学生失败:", error);
