@@ -13,11 +13,11 @@
           <p class="text-gray-700 mb-3">
             {{ course.description }}
           </p>
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-center flex-nowrap">
             <span class="text-sm text-blue-600 font-medium">{{
               course.schedule
             }}</span>
-            <NuxtLink
+            <div class="flex gap-2"><NuxtLink
               :to="`/teacher/${userStore.user.id}/videoInfo`"
               class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
               >查看视频数据</NuxtLink
@@ -26,7 +26,7 @@
               :to="`/teacher/${userStore.user.id}/videoManagement`"
               class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
               >视频管理</NuxtLink
-            >
+            ></div>
           </div>
         </div>
       </div>
