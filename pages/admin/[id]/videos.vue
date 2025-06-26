@@ -28,22 +28,19 @@
                 视频ID
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                视频姓名
+                视频标题
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                性别
+                所属课程
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                出生日期
+                视频描述
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                级别
+                视频时长
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                电话
-              </th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                邮箱
+                视频名称
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
                 操作
@@ -64,26 +61,23 @@
                 {{ video.video_id }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ video.video_name }}
+                {{ video.video_title }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ video.gender }}
+                {{ video.course_name }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ formatDate(video.birth_date) }}
+                {{ video.video_description }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ video.title }}
+                {{ formatTime(video.video_duration) }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ video.phone }}
-              </td>
-              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ video.email }}
+                {{ video.video_url }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 <NuxtLink
-                  :to="`/admin/${route.params.id}/video/${video.video_id}`"
+                  :to="`/admin/${route.params.id}/videoInfo/${video.video_id}`"
                   class="text-blue-500 hover:text-blue-700 mr-3 transition-colors"
                   >查看</NuxtLink
                 >
@@ -116,7 +110,7 @@ import type {
   Video,
   VideoResponse,
   VideosResponse
-} from "~/types/video";
+} from "~/types/admin/video";
 
 const route = useRoute();
 
@@ -140,6 +134,12 @@ const searchQuery = ref("");
 // const isDeleteDialogOpen = ref(false);
 // const currentVideo = ref<Video>();
 
+// 格式化时间 (秒 -> 分:秒)
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+};
 // 获取视频数据
 const fetchVideos = async () => {
   const { Videos } = await $fetch<VideosResponse>("/api/admin/videos", {
@@ -156,11 +156,10 @@ const filteredvideos = computed(() => {
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
     result = result.filter(
-      (t) =>
-        t.video_name.toLowerCase().includes(query) ||
-        t.video_id.toString().includes(query) ||
-        (t.phone && t.phone.includes(query)) ||
-        (t.email && t.email.toLowerCase().includes(query))
+      (v) =>
+        v.video_title.toLowerCase().includes(query) ||
+        v.video_id.toString().includes(query) ||
+        v.video_description.toString().includes(query) 
     );
   }
   return result;

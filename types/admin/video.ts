@@ -6,3 +6,9 @@ export interface Video{
   video_duration: number,
   course_name: string,
 }
+export interface VideosResponse{
+  Videos: Video[];
+}
+export interface VideoResponse{
+  Video: Video;
+}

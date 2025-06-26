@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
   try {
     const student_id = event.context.params.id;
     const video_id  = event.context.params.videoId;
-    console.log(video_id,student_id);
+    
     // 获取视频基本信息
     const [video] = await pool.query(`
       SELECT v.video_id,v.video_title,v.video_description,v.video_url,v.video_duration,t.teacher_name,c.course_name 
