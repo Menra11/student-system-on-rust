@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { StudentGet } from "~/types/student";
-import type { TeacherGet } from "~/types/teacher";
+import type { TeacherResponse } from "~/types/teacher";
 import type { AdminResponse } from "~/types/admin/admin";
 
 export const useMyUserStore = defineStore("myUserStore", {
@@ -43,7 +43,7 @@ export const useMyUserStore = defineStore("myUserStore", {
         this.user.selectedCourses = Scores.map(score => score.course_name);
         
       } else if (user === "teacher") {
-        const { Teacher } = await $fetch<TeacherGet>(
+        const { Teacher } = await $fetch<TeacherResponse>(
           `/api/teacher/${id}`,
           {
             method: "GET",

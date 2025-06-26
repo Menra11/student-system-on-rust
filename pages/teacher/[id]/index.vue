@@ -96,7 +96,7 @@ const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("zh-CN");
 };
-const fetchStudent = async () => {
+const fetchTeacher = async () => {
   const {Teacher} = await $fetch(`/api/teacher/${route.params.id}`,{
     method: "GET",
   });
@@ -106,7 +106,7 @@ const fetchStudent = async () => {
   }
 }
 onMounted( () => {
-  fetchStudent()
+  fetchTeacher()
 });
 </script>
 

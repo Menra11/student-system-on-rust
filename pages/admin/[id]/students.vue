@@ -93,7 +93,7 @@
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 <NuxtLink
-                  :to="`/admin/${route.params.id}/${student.student_id}`"
+                  :to="`/admin/${route.params.id}/student/${student.student_id}`"
                   class="text-blue-500 hover:text-blue-700 mr-3 transition-colors"
                   >查看</NuxtLink
                 >
