@@ -55,19 +55,23 @@
       
       <div class="mt-8">
         <h2 class="text-xl font-semibold mb-4">课程成绩</h2>
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white">
-            <thead>
-              <tr class="bg-gray-100">
-                <th class="py-3 px-4 text-left">课程名称</th>
-                <th class="py-3 px-4 text-left">学分</th>
-                <th class="py-3 px-4 text-left">教师</th>
-                <th class="py-3 px-4 text-left">成绩</th>
-                <th class="py-3 px-4 text-left">学期</th>
+        <div class="overflow-x-auto rounded-lg shadow">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-blue-100" align="center" valign="middle">
+              <tr>
+                <th class="py-3 px-4 text-sm text-blue-700">课程名称</th>
+                <th class="py-3 px-4 text-sm text-blue-700">学分</th>
+                <th class="py-3 px-4 text-sm text-blue-700">教师</th>
+                <th class="py-3 px-4 text-sm text-blue-700">成绩</th>
+                <th class="py-3 px-4 text-sm text-blue-700">学期</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="score in scores" :key="score.score_id" class="border-t">
+             <tbody
+              class="bg-white divide-y divide-gray-200"
+              align="center"
+              valign="middle"
+            >
+              <tr v-for="score in scores" :key="score.score_id" class="hover:bg-blue-50 transition-colors">
                 <td class="py-3 px-4">{{ score.course_name }}</td>
                 <td class="py-3 px-4">{{ score.credit }}</td>
                 <td class="py-3 px-4">{{ score.teacher_name }}</td>

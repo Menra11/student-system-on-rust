@@ -7,7 +7,7 @@
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="搜索教师..."
+            placeholder="搜索课程..."
             class="px-4 py-2 border rounded-md"
           />
         </div>
@@ -25,25 +25,25 @@
           <thead class="bg-blue-100" align="center" valign="middle">
             <tr>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                教师ID
+                课程ID
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                教师姓名
+                课程名称
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                性别
+                学分
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                出生日期
+                教授教师
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                级别
+                课室
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                电话
+                时间表
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                邮箱
+                描述
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
                 操作
@@ -56,45 +56,45 @@
             valign="middle"
           >
             <tr
-              v-for="teacher in filteredteachers"
-              :key="teacher.teacher_id"
+              v-for="course in filteredcourses"
+              :key="course.course_id"
               class="hover:bg-blue-50 transition-colors"
             >
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ teacher.teacher_id }}
+                {{ course.course_id }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ teacher.teacher_name }}
+                {{ course.course_name }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ teacher.gender }}
+                {{ course.credit }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ formatDate(teacher.birth_date) }}
+                {{course.teacher_name }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ teacher.title }}
+                {{ course.classroom }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ teacher.phone }}
+                {{ course.schedule }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{ teacher.email }}
+                {{ course.description }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 <NuxtLink
-                  :to="`/admin/${route.params.id}/teacher/${teacher.teacher_id}`"
+                  :to="`/admin/${route.params.id}/course/${course.course_id}`"
                   class="text-blue-500 hover:text-blue-700 mr-3 transition-colors"
                   >查看</NuxtLink
                 >
                 <!-- <button
-                  @click="openEditDialog(teacher)"
+                  @click="openEditDialog(course)"
                   class="text-green-500 hover:text-green-700 mr-3 transition-colors"
                 >
                   编辑
                 </button>
                 <button
-                  @click="openDeleteDialog(teacher)"
+                  @click="openDeleteDialog(course)"
                   class="text-red-500 hover:text-red-700 transition-colors"
                 >
                   删除
@@ -113,21 +113,21 @@
 import { useMyNotificationStore } from "@/stores/notification";
 
 import type {
-  Teacher,
-  TeacherResponse,
-  TeachersResponse
-} from "~/types/teacher";
+  Course,
+  CourseResponse,
+  CoursesResponse,
+} from "~/types/admin/course";
 
 const route = useRoute();
 
 const notificationStore = useMyNotificationStore();
 
 definePageMeta({
-  title: "教师管理", // 设置页面标题
+  title: "课程管理", // 设置页面标题
 });
 
 // 数据状态
-const teachers = ref<Teacher[]>([]);
+const courses = ref<Course[]>([]);
 const searchQuery = ref("");
 
 // // 加载状态
@@ -138,52 +138,43 @@ const searchQuery = ref("");
 // // 编辑和删除状态
 // const isEditDialogOpen = ref(false);
 // const isDeleteDialogOpen = ref(false);
-// const currentTeacher = ref<Teacher>();
+// const currentCourse = ref<Course>();
 
-// 获取教师数据
-const fetchTeachers = async () => {
-  const { Teachers } = await $fetch<TeachersResponse>("/api/admin/teachers", {
+// 获取课程数据
+const fetchCourses = async () => {
+  const { Courses } = await $fetch<CoursesResponse>("/api/admin/courses", {
     method: "GET",
   });
-  if (Teachers) {
-    teachers.value = Teachers;
+  if (Courses) {
+    courses.value = Courses;
   }
 };
-// 过滤后的教师数据
-const filteredteachers = computed(() => {
-  let result = teachers.value
+// 过滤后的课程数据
+const filteredcourses = computed(() => {
+  let result = courses.value
   // 按搜索词过滤
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
     result = result.filter(
-      (t) =>
-        t.teacher_name.toLowerCase().includes(query) ||
-        t.teacher_id.toString().includes(query) ||
-        (t.phone && t.phone.includes(query)) ||
-        (t.email && t.email.toLowerCase().includes(query))
+      (c) =>
+        c.course_name.toLowerCase().includes(query) ||
+        c.course_id.toString().includes(query) ||
+        (c.credit.toString() && c.credit.toString().includes(query)) ||
+        c.teacher_name.toLowerCase().includes(query)
     );
   }
   return result;
 });
 
-// 格式化日期
-const formatDate = (dateString: string) => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}/${month}/${day}`;
-};
 
 const refreshData = () => {
-  fetchTeachers();
+  fetchCourses();
 };
 
 // // 打开编辑对话框
-// const openEditDialog = (teacher: Teacher) => {
-//   currentTeacher.value = { ...teacher };
-//   currentTeacher.value.birth_date = formatDate(teacher.birth_date).replace(
+// const openEditDialog = (course: Course) => {
+//   currentCourse.value = { ...course };
+//   currentCourse.value.birth_date = formatDate(course.birth_date).replace(
 //     /\//g,
 //     "-"
 //   );
@@ -196,24 +187,24 @@ const refreshData = () => {
 //   isUpdating.value = false;
 // };
 
-// // 更新教师信息
-// const updateTeacher = async () => {
+// // 更新课程信息
+// const updateCourse = async () => {
 //   isUpdating.value = true;
 
 //   try {
 //     // 发送更新请求
 //     const response = await $fetch(
-//       `/api/teacher/${currentTeacher.value.teacher_id}`,
+//       `/api/course/${currentCourse.value.course_id}`,
 //       {
 //         method: "PUT",
-//         body: { Teacher: currentTeacher.value },
+//         body: { Course: currentCourse.value },
 //       }
 //     );
 //     console.log(response);
 
 //     if (response.success) {
 //       notificationStore.setNotification({
-//         message: "教师信息更新成功",
+//         message: "课程信息更新成功",
 //         type: "success",
 //       });
 //       closeEditDialog();
@@ -224,7 +215,7 @@ const refreshData = () => {
 //       });
 //     }
 //   } catch (error) {
-//     console.error("更新教师信息失败:", error);
+//     console.error("更新课程信息失败:", error);
 //     notificationStore.setNotification({
 //       message: `更新失败: ${error.message || "未知错误"}`,
 //       type: "error",
@@ -235,8 +226,8 @@ const refreshData = () => {
 // };
 
 // // 打开删除对话框
-// const openDeleteDialog = (teacher: Teacher) => {
-//   currentTeacher.value = { ...teacher };
+// const openDeleteDialog = (course: Course) => {
+//   currentCourse.value = { ...course };
 //   isDeleteDialogOpen.value = true;
 // };
 
@@ -253,7 +244,7 @@ const refreshData = () => {
 //   try {
 //     // 发送删除请求
 //     const response = await $fetch(
-//       `/api/teacher/${currentTeacher.value.teacher_id}`,
+//       `/api/course/${currentCourse.value.course_id}`,
 //       {
 //         method: "DELETE",
 //       }
@@ -261,17 +252,17 @@ const refreshData = () => {
 
 //     if (response.success) {
 //       // 从本地数据中移除
-//       teachers.value = teachers.value.filter(
-//         (s) => s.teacher_id !== currentTeacher.value.teacher_id
+//       courses.value = courses.value.filter(
+//         (s) => s.course_id !== currentCourse.value.course_id
 //       );
 
 //       // 检查当前页是否还有数据
-//       if (filteredTeachers.value.length === 0 && page.value > 1) {
+//       if (filteredCourses.value.length === 0 && page.value > 1) {
 //         page.value--;
 //       }
 
 //       notificationStore.setNotification({
-//         message: "教师删除成功",
+//         message: "课程删除成功",
 //         type: "success",
 //       });
 //       closeDeleteDialog();
@@ -282,7 +273,7 @@ const refreshData = () => {
 //       });
 //     }
 //   } catch (error: any) {
-//     console.error("删除教师失败:", error);
+//     console.error("删除课程失败:", error);
 //     notificationStore.setNotification({
 //       message: `更新失败: ${error.message || "未知错误"}`,
 //       type: "error",
@@ -294,12 +285,12 @@ const refreshData = () => {
 
 
 onUpdated(() => {
-  fetchTeachers();
+  fetchCourses();
 });
 
 // 初始化
 onMounted(() => {
-  fetchTeachers();
+  fetchCourses();
 });
 </script>
 

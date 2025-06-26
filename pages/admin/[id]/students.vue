@@ -32,7 +32,7 @@
       <!-- 数据表格 -->
       <div class="overflow-x-auto rounded-lg shadow">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-blue-50" align="center" valign="middle">
+          <thead class="bg-blue-100" align="center" valign="middle">
             <tr>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
                 学号
