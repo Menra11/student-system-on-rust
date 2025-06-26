@@ -1,5 +1,14 @@
 <template>
   <div class="container mx-auto px-4 max-w-6xl">
+    <div class="mb-6">
+      <button
+        @click="goBack"
+        class="flex items-center text-blue-600 hover:text-blue-800 font-medium"
+      >
+        <font-awesome-icon :icon="['fas', 'arrow-left']" class="mr-2" />
+        返回
+      </button>
+    </div>
     <!-- 视频数据区域 -->
     <div class="bg-white rounded-2xl shadow-blue overflow-hidden mb-8">
       <div class="p-6">
@@ -34,7 +43,7 @@
                 </td>
                 <td class="px-2 py-2 whitespace-nowrap text-sm">
                   <button
-                    @click="delVideo(video.video_id,video.video_url)"
+                    @click="openDeleteDialog(video.video_id, video.video_url)"
                     class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
                   >
                     删除
@@ -252,9 +261,64 @@
                 'opacity-50 cursor-not-allowed': uploadStatus != 'success',
               }"
             >
-              保存视频
+            <span v-if="isLoading" class="flex items-center">
+              <font-awesome-icon
+                :icon="['fas', 'spinner']"
+                class="animate-spin mr-2"
+              />
+              保存中...
+            </span>
+              <span v-else>保存视频</span>
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- 删除视频对话框 -->
+    <div
+      v-if="isDeleteDialogOpen"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 transform transition-transform duration-300 scale-100"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">删除确认</h3>
+          <button
+            @click="closeDeleteDialog"
+            class="text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <font-awesome-icon :icon="['fas', 'times']" class="mr-2" />
+          </button>
+        </div>
+
+        <p class="mb-6 text-gray-700">
+          确定要删除该视频
+          <span class="font-semibold">{{ currentVideoData.video_id }}</span>
+          (文件名: {{ currentVideoData.video_url }}) 吗？此操作不可逆。
+        </p>
+
+        <div class="flex justify-end space-x-3">
+          <button
+            @click="closeDeleteDialog"
+            class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+          >
+            取消
+          </button>
+          <button
+            @click="confirmDelete"
+            :disabled="isDeleting"
+            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <span v-if="isDeleting" class="flex items-center">
+              <font-awesome-icon
+                :icon="['fas', 'spinner']"
+                class="animate-spin mr-2"
+              />
+              删除中...
+            </span>
+            <span v-else> 确认删除 </span>
+          </button>
         </div>
       </div>
     </div>
@@ -268,8 +332,12 @@ import type {
   VideoResponse,
 } from "@/types/teacher/videoManagement";
 import type { CourseResponse } from "@/types/teacher/course";
+import { useMyNotificationStore } from "~/stores/notification";
 const route = useRoute();
 const router = useRouter();
+
+const notificationStore = useMyNotificationStore();
+
 definePageMeta({
   title: "视频管理",
 });
@@ -296,6 +364,12 @@ const errorMessage = ref("");
 const course_id = ref<number>();
 // 视频表单
 const videoForm = ref<Video[]>();
+const isLoading = ref(false);
+
+// 删除状态
+const isDeleteDialogOpen = ref(false);
+const isDeleting = ref(false);
+const currentVideoData = ref<{ video_id: number; video_url: string }>(null);
 
 // 状态消息
 const statusMessages = {
@@ -317,12 +391,16 @@ const statusMessages = {
   },
 };
 
+const goBack = () => {
+  router.go(-1);
+};
 // 打开添加视频的缓冲
 const openEditDialog = () => {
   editDialogLoading.value = !editDialogLoading.value;
-
+  
   setTimeout(() => {
     showEditDialog.value = !showEditDialog.value;
+    
     editingVideo.value = {
       video_id: null,
       video_title: "t",
@@ -405,17 +483,15 @@ const handleUpload = async (file: File) => {
   uploadedFile.value = file;
   uploadStatus.value = "uploading";
   uploadProgress.value = 0;
-  // 模拟上传过程
+
   const progressInterval = setInterval(() => {
     uploadProgress.value += 10;
     if (uploadProgress.value >= 100) {
       clearInterval(progressInterval);
 
-      // 模拟上传成功
       setTimeout(() => {
         uploadStatus.value = "success";
 
-        // 自动生成视频标题
         if (!editingVideo.value.video_title) {
           editingVideo.value.video_title = file.name.replace(/\.[^/.]+$/, "");
         }
@@ -424,8 +500,33 @@ const handleUpload = async (file: File) => {
   }, 200);
 };
 
+// 打开删除对话框
+const openDeleteDialog = (videoId: number, videoURL: string) => {
+  currentVideoData.value = {
+    video_id: videoId,
+    video_url: videoURL,
+  };
+  isDeleteDialogOpen.value = true;
+};
+
+// 关闭删除对话框
+const closeDeleteDialog = () => {
+  isDeleteDialogOpen.value = false;
+  isDeleting.value = false;
+};
+
+// 确认删除
+const confirmDelete = async () => {
+  isDeleting.value = true;
+  await delVideo(currentVideoData.value.video_id, currentVideoData.value.video_url);
+  setTimeout(() => {
+    closeDeleteDialog()
+  }, 1000);
+  
+};
+
 // 删除视频
-const delVideo = async (id: number,url:string) => {
+const delVideo = async (id: number, url: string) => {
   try {
     await $fetch(`/api/delVideoFile`, {
       method: "DELETE",
@@ -436,9 +537,15 @@ const delVideo = async (id: number,url:string) => {
     await $fetch(`/api/teacher/${route.params.id}/${id}`, {
       method: "DELETE",
     });
-    console.log("删除成功");
+    notificationStore.setNotification({
+      message: "删除成功",
+      type: "success",
+    });
   } catch (error) {
-    console.log(error);
+    notificationStore.setNotification({
+      message: error.message,
+      type: "error",
+    });
   }
 };
 
@@ -450,13 +557,20 @@ const saveVideoToDatabase = async (video: Video, filename: string) => {
       method: "POST",
       body: video,
     });
-    console.log("保存成功");
+    notificationStore.setNotification({
+      message: "上传成功",
+      type: "success",
+    });
   } catch (error) {
-    console.log(error);
+    notificationStore.setNotification({
+      message: error.message,
+      type: "error",
+    });
   }
 };
 
 const saveVideo = async (file: File) => {
+  isLoading.value = true;
   const formData = new FormData();
   formData.append("video", file);
 
@@ -474,6 +588,9 @@ const saveVideo = async (file: File) => {
     }
     await saveVideoToDatabase(editingVideo.value, response.filename);
     openEditDialog();
+    setTimeout(() => {
+      isLoading.value = false;
+    }, 1000);
   } catch (error) {
     console.error("上传出错:", error);
   }
