@@ -87,7 +87,7 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-for="course in filteredCourses" :key="course.course_id">
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4">
               <div class="flex items-center">
                 <div
                   class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center"
@@ -357,7 +357,10 @@ const resetFilters = () => {
 // 提交选课
 const submitSelection = async () => {
   if (selectedCourses.value.length === 0) {
-    alert("请至少选择一门课程");
+    notificationStore.setNotification({
+      message: "请至少选一门课程",
+      type: "error",
+    });
     return;
   }
 
@@ -379,8 +382,6 @@ const submitSelection = async () => {
       type: "success",
     });
     userStore.flashCourses(selectedCourses.value.map((c) => c.course_name));
-    console.log(userStore.user.selectedCourses);
-    
     navigateTo("/student/" + userStore.user.id + "");
   } catch (error) {
     console.error("选课失败:", error);
