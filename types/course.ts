@@ -8,7 +8,6 @@ export interface Course {
   description: string;
   video_id: number;
 }
-export interface CourseResponse {
-  studentId: number;
-  courses: [];
+export interface CoursesResponse {
+  Courses: Course[];
 }

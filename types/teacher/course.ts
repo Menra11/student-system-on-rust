@@ -6,6 +6,9 @@ export interface Course {
   schedule: string;
   description: string;
 }
+export interface CoursesResponse {
+  Courses: Course[];
+}
 export interface CourseResponse {
-  CoursesInformation: Course[];
+  Course: Course;
 }

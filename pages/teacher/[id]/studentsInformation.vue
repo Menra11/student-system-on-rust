@@ -2,13 +2,13 @@
   <div class="bg-white rounded-lg shadow p-6">
     <div class="overflow-x-auto rounded-lg shadow">
       <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-blue-50" align="center" valign="middle">
+        <thead class="bg-blue-100" align="center" valign="middle">
           <tr>
-            <th class="px-2 py-2 text-xs text-blue-700">学生ID</th>
-            <th class="px-2 py-2 text-xs text-blue-700">学生姓名</th>
-            <th class="px-2 py-2 text-xs text-blue-700">课程</th>
-            <th class="px-2 py-2 text-xs text-blue-700">班级</th>
-            <th class="px-2 py-2 text-xs text-blue-700">操作</th>
+            <th class="px-2 py-2 text-sm text-blue-700">学生ID</th>
+            <th class="px-2 py-2 text-sm text-blue-700">学生姓名</th>
+            <th class="px-2 py-2 text-sm text-blue-700">课程</th>
+            <th class="px-2 py-2 text-sm text-blue-700">班级</th>
+            <th class="px-2 py-2 text-sm text-blue-700">操作</th>
           </tr>
         </thead>
         <tbody

@@ -7,9 +7,9 @@ from teacher t
 left join course c on c.teacher_id = t.teacher_id
 where t.teacher_id = ?;
 `
-const [CoursesInformation] = await pool.query(query, [id])
+const [Courses] = await pool.query(query, [id])
 
 return {
-  CoursesInformation:CoursesInformation
+  Courses:Courses
 }
 })

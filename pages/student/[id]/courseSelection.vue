@@ -227,7 +227,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Course } from "@/types/course";
+import type { Course,CoursesResponse } from "@/types/course";
 import type { Teacher } from "@/types/teacher";
 
 import { useMyUserStore } from "@/stores/user";
@@ -242,10 +242,10 @@ const notificationStore = useMyNotificationStore();
 definePageMeta({
   title: "课程选择",
 });
-// 模拟教师数据
+// 教师数据
 const teachers = ref<Teacher[]>([{ teacher_id: null, teacher_name: "" }]);
 
-// 模拟课程数据
+// 课程数据
 const courses = ref<Course[]>([
   {
     course_id: null,
@@ -269,10 +269,10 @@ const searchParams = ref({
 });
 // 获取所有课程
 const getCourses = async () => {
-  const response = await $fetch<Course[]>("/api/course", {
+  const {Courses} = await $fetch<CoursesResponse>("/api/course", {
     method: "GET",
   });
-  courses.value = response;
+  courses.value = Courses;
   // 筛选已选课程
   courses.value = courses.value.filter(
     (course) =>

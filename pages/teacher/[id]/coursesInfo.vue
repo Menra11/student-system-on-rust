@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
-import type { Course,CourseResponse } from "@/types/teacher/course";
+import type { Course,CoursesResponse } from "@/types/teacher/course";
 const route = useRoute();
 definePageMeta({
   title: "教授课程信息", // 设置页面标题
@@ -54,13 +54,14 @@ const courseData = ref<Course[]>([
   },
 ]);
 onMounted(async () => {
-  const { CoursesInformation } = await $fetch<CourseResponse>(
+  const { Courses } = await $fetch<CoursesResponse>(
     `/api/teacher/${route.params.id}/coursesInfo`,
     {
       method: "GET",
     }
   );
 
-  courseData.value = CoursesInformation;
+  courseData.value = Courses;
+  console.log(Courses);
 });
 </script>

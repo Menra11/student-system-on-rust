@@ -14,12 +14,12 @@
       <div class="p-6">
         <div class="overflow-x-auto rounded-lg shadow">
           <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-blue-50" align="center" valign="middle">
+            <thead class="bg-blue-100" align="center" valign="middle">
               <tr>
-                <th class="px-2 py-2 text-xs text-blue-700">课程 ID</th>
-                <th class="px-2 py-2 text-xs text-blue-700">视频标题</th>
-                <th class="px-2 py-2 text-xs text-blue-700">视频时长</th>
-                <th class="px-2 py-2 text-xs text-blue-700">操作</th>
+                <th class="px-2 py-2 text-sm text-blue-700">课程 ID</th>
+                <th class="px-2 py-2 text-sm text-blue-700">视频标题</th>
+                <th class="px-2 py-2 text-sm text-blue-700">视频时长</th>
+                <th class="px-2 py-2 text-sm text-blue-700">操作</th>
               </tr>
             </thead>
             <tbody
@@ -261,13 +261,13 @@
                 'opacity-50 cursor-not-allowed': uploadStatus != 'success',
               }"
             >
-            <span v-if="isLoading" class="flex items-center">
-              <font-awesome-icon
-                :icon="['fas', 'spinner']"
-                class="animate-spin mr-2"
-              />
-              保存中...
-            </span>
+              <span v-if="isLoading" class="flex items-center">
+                <font-awesome-icon
+                  :icon="['fas', 'spinner']"
+                  class="animate-spin mr-2"
+                />
+                保存中...
+              </span>
               <span v-else>保存视频</span>
             </button>
           </div>
@@ -331,7 +331,7 @@ import type {
   Video,
   VideoResponse,
 } from "@/types/teacher/videoManagement";
-import type { CourseResponse } from "@/types/teacher/course";
+import type { CoursesResponse } from "@/types/teacher/course";
 import { useMyNotificationStore } from "~/stores/notification";
 const route = useRoute();
 const router = useRouter();
@@ -347,11 +347,11 @@ const showEditDialog = ref(false);
 const editDialogLoading = ref(false);
 const editingVideo = ref<Video | null>({
   video_id: null,
-  video_title: "t",
-  video_description: "描述",
-  video_url: "地址",
-  video_duration: 300,
-  course_id: 10001,
+  video_title: "",
+  video_description: "",
+  video_url: "",
+  video_duration: null,
+  course_id: null,
 });
 
 // 上传状态
@@ -397,16 +397,16 @@ const goBack = () => {
 // 打开添加视频的缓冲
 const openEditDialog = () => {
   editDialogLoading.value = !editDialogLoading.value;
-  
+
   setTimeout(() => {
     showEditDialog.value = !showEditDialog.value;
-    
+
     editingVideo.value = {
       video_id: null,
-      video_title: "t",
-      video_description: "描述",
-      video_url: "地址",
-      video_duration: 300,
+      video_title: "",
+      video_description: "",
+      video_url: "",
+      video_duration: null,
       course_id: null,
     };
     // 重置上传状态
@@ -518,11 +518,13 @@ const closeDeleteDialog = () => {
 // 确认删除
 const confirmDelete = async () => {
   isDeleting.value = true;
-  await delVideo(currentVideoData.value.video_id, currentVideoData.value.video_url);
+  await delVideo(
+    currentVideoData.value.video_id,
+    currentVideoData.value.video_url
+  );
   setTimeout(() => {
-    closeDeleteDialog()
+    closeDeleteDialog();
   }, 1000);
-  
 };
 
 // 删除视频
@@ -597,13 +599,13 @@ const saveVideo = async (file: File) => {
 };
 
 const updateVideoList = async () => {
-  const { CoursesInformation } = await $fetch<CourseResponse>(
+  const { Courses } = await $fetch<CoursesResponse>(
     `/api/teacher/${route.params.id}/coursesInfo`,
     {
       method: "GET",
     }
   );
-  course_id.value = CoursesInformation[0].course_id;
+  course_id.value = Courses[0].course_id;
   const { Videos } = await $fetch<VideoResponse>(
     `/api/teacher/${route.params.id}/videos`,
     {

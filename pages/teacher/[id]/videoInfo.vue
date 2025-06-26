@@ -13,16 +13,16 @@
     <div class="bg-white rounded-lg shadow p-6">
       <div class="overflow-x-auto rounded-lg shadow">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-blue-50" align="center" valign="middle">
+          <thead class="bg-blue-100" align="center" valign="middle">
             <tr>
-              <th class="px-2 py-2 text-xs text-blue-700">学生 ID</th>
-              <th class="px-2 py-2 text-xs text-blue-700">学生姓名</th>
-              <th class="px-2 py-2 text-xs text-blue-700">课程名</th>
-              <th class="px-2 py-2 text-xs text-blue-700">视频标题</th>
-              <th class="px-2 py-2 text-xs text-blue-700">视频时长</th>
-              <th class="px-2 py-2 text-xs text-blue-700">完成进度</th>
-              <th class="px-2 py-2 text-xs text-blue-700">成绩</th>
-              <th class="px-2 py-2 text-xs text-blue-700">操作</th>
+              <th class="px-2 py-2 text-sm text-blue-700">学生 ID</th>
+              <th class="px-2 py-2 text-sm text-blue-700">学生姓名</th>
+              <th class="px-2 py-2 text-sm text-blue-700">课程名</th>
+              <th class="px-2 py-2 text-sm text-blue-700">视频标题</th>
+              <th class="px-2 py-2 text-sm text-blue-700">视频时长</th>
+              <th class="px-2 py-2 text-sm text-blue-700">完成进度</th>
+              <th class="px-2 py-2 text-sm text-blue-700">成绩</th>
+              <th class="px-2 py-2 text-sm text-blue-700">操作</th>
             </tr>
           </thead>
           <tbody
@@ -155,7 +155,14 @@
               @click="submitScore()"
               class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
-              提交
+            <span v-if="isUpdating" class="flex items-center">
+                  <font-awesome-icon
+                    :icon="['fas', 'spinner']"
+                    class="animate-spin mr-2"
+                  />
+                  保存中...
+                </span>
+              <span v-else>提交</span>
             </button>
           </div>
         </div>
@@ -194,7 +201,7 @@ const scoreInput = ref<number | null>(null);
 const scoreError = ref<string | null>(null);
 
 const showScoreDialog = ref(false);
-
+const isUpdating = ref(false);
 const openScoreDialog = (videoInfo: VideoInfo) => {
   showScoreDialog.value = true;
   selectedVideo.value = videoInfo;
@@ -206,6 +213,7 @@ const closeScoreDialog = () => {
 };
 
 const submitScore = async () => {
+  isUpdating.value = true;
   if (!scoreInput.value) {
     scoreError.value = "请输入分数";
     return;
@@ -230,7 +238,11 @@ const submitScore = async () => {
       type: "success",
     });
   }
-  closeScoreDialog()
+  setTimeout(() => {
+    isUpdating.value = false;
+    getVideoInfo();
+    closeScoreDialog();
+  }, 1000);
 };
 const goBack = () => {
   router.go(-1);
