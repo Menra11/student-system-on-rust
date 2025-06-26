@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-blue-50">
     <Header />
 
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class=" mx-auto px-4 py-8 max-w-5xl">
       <!-- 导航卡片 -->
       <div class="bg-white rounded-2xl shadow-blue overflow-hidden mb-8">
         <div class="bg-gradient-to-r from-blue-600 to-blue-700 py-4 px-6">

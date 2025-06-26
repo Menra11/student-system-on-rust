@@ -2,7 +2,7 @@
   <header
     class="bg-gradient-to-r from-blue-700 to-blue-800 text-white shadow-md"
   >
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center max-w-5xl">
       <div class="flex items-center space-x-2">
         <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-xl" />
         <h1 class="text-lg font-bold truncate max-w-[160px] sm:max-w-none">
