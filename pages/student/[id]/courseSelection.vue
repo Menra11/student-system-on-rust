@@ -379,6 +379,8 @@ const submitSelection = async () => {
       type: "success",
     });
     userStore.flashCourses(selectedCourses.value.map((c) => c.course_name));
+    console.log(userStore.user.selectedCourses);
+    
     navigateTo("/student/" + userStore.user.id + "");
   } catch (error) {
     console.error("选课失败:", error);
