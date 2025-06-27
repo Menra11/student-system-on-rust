@@ -19,11 +19,13 @@ watch(
   }
 ); 
 </script>
-
-<!-- 
-明日任务：
-给学生添加课程时加上班级一起添加
-给教师加上给成绩任务
-教师的删除页面添加
-管理员剩下页面添加
--->
+<style>
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+</style>

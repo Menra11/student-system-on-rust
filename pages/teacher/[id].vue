@@ -42,7 +42,7 @@
           </h2>
         </div>
 
-        <div class="p-6">
+        <div class="p-6 min-h-128">
           <NuxtPage />
         </div>
       </div>

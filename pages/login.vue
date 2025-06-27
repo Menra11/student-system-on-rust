@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-blue-300 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-blue-100 min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
       <div class="bg-white rounded-2xl shadow-blue overflow-hidden">
         <!-- 头部装饰 -->
