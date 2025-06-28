@@ -25,6 +25,3 @@ logs
 
 # assets videos
 assets/videos
-
-# rust
-rs-server/target
