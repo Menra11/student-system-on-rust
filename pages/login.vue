@@ -311,10 +311,8 @@ const useLogin = async () => {
     isLoading.value = true;
     const response = await $fetch<LoginResponse>("/api/login", {
       method: "POST",
-      params: {
-        user_id: loginData.user_id,
-        password: loginData.password,
-        user: loginData.user,
+      body: {
+        userFrom: loginData,
       },
     });
     if (response.success) {

@@ -18,6 +18,13 @@ watch(
     }
   }
 ); 
+// onMounted(async() => {
+//   const res = await $fetch("http://127.0.0.1:5800/api/test", {
+//       method: "get",
+//     });
+//   console.log(res);
+  
+// });
 </script>
 <style>
 .page-enter-active,

@@ -1,14 +1,16 @@
 import pool from "@/server/api/db";
 import jwt from "jsonwebtoken";
-
+import type { LoginDataRequest, loginData } from "@/types/login";
 // 从环境变量获取密钥，确保在生产环境设置
 const JWT_SECRET = "your-very-secure-secret-key";
 const JWT_EXPIRES_IN = "1d";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { user_id, password, user } = getQuery(event);
-
+    const { userFrom } = await readBody<LoginDataRequest>(event);
+    const { user_id, password, user } = userFrom;
+    console.log(userFrom);
+    
     let query = "";
     let userData: any;
 
