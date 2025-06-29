@@ -1,9 +1,9 @@
 import pool from "@/server/api/db";
-import type { CourseResponse } from "@/types/course";
+import type { CourseRequest } from "@/types/course";
 export default defineEventHandler(async (event) => {
   try {
     const student_id = event.context.params?.id;
-    const { courses } = getQuery<CourseResponse>(event);
+    const { courses } = getQuery<CourseRequest>(event);
     // 验证输入
     if (!student_id || !courses) {
       return {

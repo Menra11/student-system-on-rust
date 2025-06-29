@@ -1,12 +1,12 @@
 export interface Video{
-  video_id: number,
-  video_title: string,
-  video_description: string,
-  video_url: string,
-  video_duration: number,
-  teacher_name: string,
-  course_name: string,
-  completed: boolean
+  video_id:           number,
+  video_title:        string,
+  video_description:  string,
+  video_url:          string,
+  video_duration:     number,
+  teacher_name:       string,
+  course_name:        string,
+  completed:          boolean
 }
 export interface VideoResponse{
   video_id: number,

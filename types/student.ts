@@ -37,10 +37,16 @@ export interface Score {
   course_name: string
   credit: number
   teacher_name: string
-  score: number
+  score: number | null
   semester: string
 }
-export interface StudentGet  {
-  Student: Student
-  Scores: Score[]
+export interface StudentRes {
+  success: boolean
+  message?: string
+  student?: Student
+}
+export interface ScoreRes {
+  success: boolean
+  message?: string
+  scores?: Score[]
 }

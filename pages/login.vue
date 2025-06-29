@@ -309,7 +309,7 @@ const useLogin = async () => {
   if (!validateForm()) return;
   try {
     isLoading.value = true;
-    const response = await $fetch<LoginResponse>("/api/login", {
+    const response = await $fetch<LoginResponse>("http://localhost:5800/api/login", {
       method: "POST",
       body: {
         user_from: loginData,

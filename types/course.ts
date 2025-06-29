@@ -8,6 +8,13 @@ export interface Course {
   description: string;
   video_id: number;
 }
+
+export interface CourseRequest {
+  courses: Course[];
+}
+
 export interface CoursesResponse {
-  Courses: Course[];
+  success: boolean;
+  message: string;
+  courses?: Course[];
 }
