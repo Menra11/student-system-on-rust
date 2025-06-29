@@ -33,7 +33,7 @@
             <div class="relative">
               <input
                 id="username"
-                type="text"
+                type="number"
                 class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300"
                 placeholder="请输入您的ID"
                 v-model="loginData.user_id"
@@ -312,16 +312,17 @@ const useLogin = async () => {
     const response = await $fetch<LoginResponse>("/api/login", {
       method: "POST",
       body: {
-        userFrom: loginData,
+        user_from: loginData,
       },
     });
+
     if (response.success) {
       userStore.setToken(response.token);
       await userStore.getUser(loginData.user_id, loginData.user);
       notificationStore.setNotification({
         message: "登录成功",
         type: "success",
-      })
+      });
       if (import.meta.server) {
         // 设置cookie，有效期与token相同
         document.cookie = `token=${response.token}; path=/; max-age=${

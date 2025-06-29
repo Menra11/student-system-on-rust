@@ -1,4 +1,35 @@
-# Nuxt Minimal Starter
+# 描述
+
+技术采用
+
+- 前后端一体化: nuxt3 + Tailwind Css
+- 数据库: mysql
+
+功能包含
+
+- 学生、教师与管理员登录
+- 学生注册
+
+学生功能
+
+- 选择课程
+- 浏览视频
+- 记录浏览时间
+
+教师功能
+
+- 上传视频
+- 删除视频
+- 浏览学生信息
+- 成绩打分
+
+管理员功能
+
+- 浏览学生、教师、课程、视频信息
+- 更改学生信息
+- 删除学生信息
+
+## Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
@@ -7,17 +38,8 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 Make sure to install dependencies:
 
 ```bash
-# npm
-npm install
-
 # pnpm
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
 ## Development Server
@@ -25,17 +47,8 @@ bun install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
 # pnpm
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
 ## Production
@@ -43,33 +56,15 @@ bun run dev
 Build the application for production:
 
 ```bash
-# npm
-npm run build
-
 # pnpm
 pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
 Locally preview production build:
 
 ```bash
-# npm
-npm run preview
-
 # pnpm
 pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

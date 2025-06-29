@@ -7,10 +7,10 @@ const JWT_EXPIRES_IN = "1d";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { userFrom } = await readBody<LoginDataRequest>(event);
-    const { user_id, password, user } = userFrom;
-    console.log(userFrom);
-    
+    const { user_from } = await readBody<LoginDataRequest>(event);
+    const { user_id, password, user } = user_from;
+    console.log(user_from);
+
     let query = "";
     let userData: any;
 

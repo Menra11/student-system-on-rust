@@ -203,7 +203,7 @@
           <div class="mb-4">
             <label
               class="block text-gray-700 text-sm font-medium mb-2"
-              for="class_name"
+              for="class_id"
             >
               <font-awesome-icon
                 :icon="['fas', 'graduation-cap']"
@@ -213,16 +213,18 @@
             </label>
             <div class="relative">
               <select
-                id="class_name"
-                v-model="registerData.class_name"
+                id="class_id"
+                v-model="registerData.class_id"
                 class="w-full px-4 py-3 pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none input-focus transition-all duration-300 appearance-none bg-white"
               >
                 <option value="">请选择</option>
-                <option value="计算机科学与技术1班">计算机科学与技术1班</option>
-                <option value="计算机科学与技术2班">计算机科学与技术2班</option>
-                <option value="软件工程1班">软件工程1班</option>
-                <option value="软件工程2班">软件工程2班</option>
-                <option value="人工智能1班">人工智能1班</option>
+                <option
+                  v-for="cls in classes"
+                  :key="cls.class_id"
+                  :value="cls.class_id"
+                >
+                  {{ cls.class_name }}
+                </option>
               </select>
               <div
                 class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"
@@ -326,7 +328,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { registerData } from "@/types/register";
+import type { RegisterData, RegisterResponse } from "@/types/register";
+import type { Class, ClassResponse } from "~/types/student";
 import { useMyNotificationStore } from "@/stores/notification";
 
 const route = useRoute();
@@ -335,12 +338,12 @@ const router = useRouter();
 const notificationStore = useMyNotificationStore();
 
 // 注册表单数据
-const registerData = reactive<registerData>({
+const registerData = reactive<RegisterData>({
   student_id: 2025001,
   student_name: "xmd",
   gender: "男",
   birth_date: "2025-06-07",
-  class_name: "计算机科学与技术2班",
+  class_id: 101,
   phone: "18675179658",
   email: "3154975390@qq.com",
   password: "123456",
@@ -348,6 +351,17 @@ const registerData = reactive<registerData>({
 
 const isLoading = ref(false);
 const errorMessage = ref("");
+
+const classes = ref<Class[]>([]);
+
+const fetchClasses = async () => {
+  const { Classes } = await $fetch<ClassResponse>("/api/admin/classes", {
+    method: "get",
+  });
+  if (Classes) {
+    classes.value = Classes;
+  }
+};
 
 // 表单提交处理
 const handleSubmit = async () => {
@@ -359,22 +373,25 @@ const handleSubmit = async () => {
 
   try {
     isLoading.value = true;
+    console.log(registerData);
 
-    const response = await $fetch("/api/register", {
+    const response = await $fetch<RegisterResponse>("/api/register", {
       method: "POST",
-      params: registerData,
+      body: { user_from: registerData },
     });
+    if (response.success) {
+      notificationStore.setNotification({
+        message: "注册成功",
+        type: "success",
+      });
 
-    notificationStore.setNotification({
-      message: "注册成功",
-      type: "success",
-    });
-
-    setTimeout(() => {
-      isLoading.value = false;
-      router.push("/login");
-    }, 1500);
-
+      setTimeout(() => {
+        isLoading.value = false;
+        router.push("/login");
+      }, 1500);
+    } else {
+      errorMessage.value = response.message;
+    }
   } catch (error) {
     console.error("注册失败:", error);
     errorMessage.value = "注册失败，请稍后再试";
@@ -386,7 +403,7 @@ const handleSubmit = async () => {
 const validateForm = (): boolean => {
   if (
     !registerData.student_id ||
-    registerData.student_id <= 0 ||
+    registerData.student_id < 0 ||
     registerData.student_id.toString().length !== 7
   ) {
     errorMessage.value = "请输入7位有效的学号";
@@ -413,7 +430,7 @@ const validateForm = (): boolean => {
     return false;
   }
 
-  if (!registerData.class_name) {
+  if (!registerData.class_id) {
     errorMessage.value = "请选择班级";
     return false;
   }
@@ -437,6 +454,10 @@ const validateForm = (): boolean => {
 const goToLogin = () => {
   router.push("/login");
 };
+
+onMounted(() => {
+  fetchClasses();
+});
 </script>
 
 <style scoped>
