@@ -131,7 +131,7 @@
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
 import { useMyNotificationStore } from "~/stores/notification";
-import type { VideoGet, VideoResponse, Progress } from "@/types/video";
+import type { VideoResponse, Video, Progress } from "@/types/video";
 definePageMeta({
   title: "课程视频", // 设置页面标题
 });
@@ -153,7 +153,7 @@ const startTime = ref(0); // 开始播放的时间戳
 const lastPlayedTime = ref(0); // 上次暂停时的时间
 
 // 视频信息
-const videoData = ref<VideoResponse>({
+const videoData = ref<Video>({
   video_id: null,
   video_title: "",
   video_description: "",
@@ -249,7 +249,8 @@ const videoEnded = async () => {
     (watchedTime.value / videoData.value.video_duration) * 100
   );
   const completed = completionRate == 100 ? 1 : 0;
-  const progress = watchedTime.value / videoData.value.video_duration;
+  // 取小数点后两位
+  const progress = parseFloat((watchedTime.value / videoData.value.video_duration).toFixed(2));
 
   if (progress != progressData.value.progress) {
     notificationStore.setNotification({
@@ -257,18 +258,18 @@ const videoEnded = async () => {
       type: "success",
     });
   }
-  const res = await $fetch<VideoGet>(
-    `/api/student/${route.params.id}/course-video/${route.params.videoId}`,
+  const res = await $fetch<VideoResponse>(
+    `http://127.0.0.1:5800/api/student/${route.params.id}/video/${route.params.videoId}`,
     {
-      method: "post",
-      params: {
-        id: route.params.videoId,
-        student_id: userStore.user.id,
+      method: "put",
+      body: {
         completed: completed,
         progress: progress,
       },
     }
   );
+  console.log(res);
+  
 };
 
 // 加载视频
@@ -291,17 +292,26 @@ watch(
   { immediate: true }
 );
 
-onMounted(async () => {
-  const res = await $fetch<VideoGet>(
-    `/api/student/${route.params.id}/course-video/${route.params.videoId}`,
+const fetchVideoData = async () => {
+  const response = await $fetch<VideoResponse>(
+    `http://127.0.0.1:5800/api/student/${route.params.id}/video/${route.params.videoId}`,
     {
       method: "GET",
     }
   );
-  videoData.value = res.video[0];
-  progressData.value = res.progress[0];
+  console.log(response);
+  
+  if(response.success){
+videoData.value = response.video;
+  progressData.value = response.progress;
   watchedTime.value =
     progressData.value.progress * videoData.value.video_duration;
+  }
+  
+};
+
+onMounted(() => {
+  fetchVideoData();
 });
 
 // 组件卸载

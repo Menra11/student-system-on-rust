@@ -373,8 +373,6 @@ const handleSubmit = async () => {
 
   try {
     isLoading.value = true;
-    console.log(registerData);
-
     const response = await $fetch<RegisterResponse>("http://localhost:5800/api/register", {
       method: "POST",
       body: { user_from: registerData },

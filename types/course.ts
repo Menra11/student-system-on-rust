@@ -18,3 +18,8 @@ export interface CoursesResponse {
   message: string;
   courses?: Course[];
 }
+
+export interface CourseSelectResponse {
+  success: boolean;
+  message: string;
+}

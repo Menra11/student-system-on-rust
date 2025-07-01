@@ -323,6 +323,8 @@ const useLogin = async () => {
         message: "登录成功",
         type: "success",
       });
+      console.log(userStore.user);
+      
       if (import.meta.server) {
         // 设置cookie，有效期与token相同
         document.cookie = `token=${response.token}; path=/; max-age=${

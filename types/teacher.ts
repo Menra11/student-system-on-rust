@@ -7,9 +7,11 @@ export interface Teacher {
   phone?: string;
   email?: string;
 }
-export interface TeachersResponse {
-  Teachers: Teacher[];
-}
 export interface TeacherResponse {
   Teacher: Teacher;
+}
+export interface TeachersResponse {
+  success: boolean;
+  message: string;
+  teachers?: Teacher[];
 }

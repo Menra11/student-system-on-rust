@@ -242,8 +242,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Course, CoursesResponse } from "@/types/course";
-import type { Teacher } from "@/types/teacher";
+import type {
+  Course,
+  CoursesResponse,
+  CourseSelectResponse,
+} from "@/types/course";
+import type { Teacher, TeachersResponse } from "@/types/teacher";
 
 import { useMyUserStore } from "@/stores/user";
 import { useMyNotificationStore } from "@/stores/notification";
@@ -258,13 +262,13 @@ definePageMeta({
   title: "课程选择",
 });
 // 教师数据
-const teachers = ref<Teacher[]>([{ teacher_id: null, teacher_name: "" }]);
+const teachers = ref<Teacher[]>([]);
 
 // 课程数据
 const courses = ref<Course[]>([]);
 
 // 选课状态
-const selectedCourses = ref([]);
+const selectedCourses = ref<Course[]>([]);
 const isSubmitting = ref(false);
 const searchParams = ref({
   courseName: "",
@@ -274,7 +278,7 @@ const searchParams = ref({
 // 获取所有课程
 const getCourses = async () => {
   const response = await $fetch<CoursesResponse>(
-    "http://localhost:5800/api/courses",
+    "http://127.0.0.1:5800/api/courses",
     {
       method: "GET",
     }
@@ -292,10 +296,15 @@ const getCourses = async () => {
 };
 // 获取所有教师
 const getTeachers = async () => {
-  const response = await $fetch<Teacher[]>("/api/teacher", {
-    method: "GET",
-  });
-  teachers.value = response;
+  const response = await $fetch<TeachersResponse>(
+    "http://127.0.0.1:5800/api/teachers",
+    {
+      method: "GET",
+    }
+  );
+  if (response.success) {
+    teachers.value = response.teachers;
+  }
 };
 // 获取教师姓名
 const getTeacherName = (teacherId) => {
@@ -376,22 +385,24 @@ const submitSelection = async () => {
   try {
     isSubmitting.value = true;
 
-    const response = await $fetch(
-      `/api/student/${route.params.id}/select-courses`,
+    const response = await $fetch<CourseSelectResponse>(
+      `http://127.0.0.1:5800/api/student/${route.params.id}/courses_select`,
       {
         method: "POST",
-        params: {
-          courses: selectedCourses.value.map((c) => c.course_id),
+        body: {
+          courses_id: selectedCourses.value.map((c) => c.course_id),
         },
       }
     );
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    notificationStore.setNotification({
-      message: "选课成功",
-      type: "success",
-    });
-    userStore.flashCourses(selectedCourses.value.map((c) => c.course_name));
-    navigateTo("/student/" + userStore.user.id + "");
+    if (response.success) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      notificationStore.setNotification({
+        message: "选课成功",
+        type: "success",
+      });
+      userStore.flashCourses(selectedCourses.value.map((c) => c.course_name));
+      navigateTo("/student/" + userStore.user.id + "");
+    }
   } catch (error) {
     console.error("选课失败:", error);
     notificationStore.setNotification({

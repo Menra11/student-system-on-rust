@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   // 如果有token，检查用户信息是否已加载
-  console.log(userStore.user);
+  // console.log(userStore.user);
 
   // 检查登录角色
   if (userStore.user.user_type) {
