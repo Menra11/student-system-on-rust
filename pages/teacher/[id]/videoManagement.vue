@@ -328,10 +328,10 @@
 <script setup lang="ts">
 import type {
   UploadVideoRes,
-  Video,
-  VideoResponse,
+  CourseVideos,
+  CourseVideosResponse,
 } from "@/types/teacher/videoManagement";
-import type { CoursesResponse } from "@/types/teacher/course";
+import type { CourseInfo, CoursesInfoResponse } from "@/types/teacher/course";
 import { useMyNotificationStore } from "~/stores/notification";
 const route = useRoute();
 const router = useRouter();
@@ -345,7 +345,7 @@ definePageMeta({
 // 编辑状态
 const showEditDialog = ref(false);
 const editDialogLoading = ref(false);
-const editingVideo = ref<Video | null>({
+const editingVideo = ref<CourseVideos | null>({
   video_id: null,
   video_title: "",
   video_description: "",
@@ -363,7 +363,7 @@ const uploadedFile = ref<File | null>(null);
 const errorMessage = ref("");
 const course_id = ref<number>();
 // 视频表单
-const videoForm = ref<Video[]>();
+const videoForm = ref<CourseVideos[]>();
 const isLoading = ref(false);
 
 // 删除状态
@@ -551,7 +551,7 @@ const delVideo = async (id: number, url: string) => {
   }
 };
 
-const saveVideoToDatabase = async (video: Video, filename: string) => {
+const saveVideoToDatabase = async (video: CourseVideos, filename: string) => {
   video.course_id = course_id.value;
   video.video_url = filename;
   try {
@@ -599,23 +599,26 @@ const saveVideo = async (file: File) => {
 };
 
 const updateVideoList = async () => {
-  const { Courses } = await $fetch<CoursesResponse>(
-    `/api/teacher/${route.params.id}/coursesInfo`,
+  const course_info_response = await $fetch<CoursesInfoResponse>(
+    `http://localhost:5800/api/teacher/${route.params.id}/courses_info`,
     {
       method: "GET",
     }
   );
-  course_id.value = Courses[0].course_id;
-  const { Videos } = await $fetch<VideoResponse>(
-    `/api/teacher/${route.params.id}/videos`,
+  if (course_info_response.success) {
+    let courses_info: CourseInfo = course_info_response.courses_info[0];
+    course_id.value = courses_info.course_id;
+  }
+
+  const course_videos_response = await $fetch<CourseVideosResponse>(
+    `http://localhost:5800/api/teacher/${route.params.id}/course_videos`,
     {
       method: "GET",
-      params: {
-        course_id: course_id.value,
-      },
     }
   );
-  videoForm.value = Videos;
+  if (course_videos_response.success) {
+    videoForm.value = course_videos_response.course_videos;
+  }
 };
 onUpdated(() => {
   updateVideoList();

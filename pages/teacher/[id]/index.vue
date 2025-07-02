@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Teacher } from "@/types/teacher";
+import type { Teacher,TeacherResponse } from "@/types/teacher";
 const route = useRoute();
 const router = useRouter();
 definePageMeta({
@@ -55,7 +55,6 @@ definePageMeta({
 const teacher = ref<Teacher>({
   teacher_id: 0,
   teacher_name: "",
-
 });
 // 格式化日期
 const formatDate = (dateString: string) => {
@@ -64,12 +63,12 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString("zh-CN");
 };
 const fetchTeacher = async () => {
-  const {Teacher} = await $fetch(`/api/teacher/${route.params.id}`,{
+  const response = await $fetch<TeacherResponse>(`http://localhost:5800/api/teacher/${route.params.id}`,{
     method: "GET",
   });
   
-  if (Teacher) {
-    teacher.value = Teacher[0];
+  if (response.success) {
+    teacher.value = response.teacher;
   }
 }
 onMounted( () => {

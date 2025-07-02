@@ -172,7 +172,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { VideoInfo, VideoInfoResponse } from "@/types/teacher/videoInfo";
+import type { VideosInfo, VideosInfoResponse } from "@/types/teacher/videoInfo";
 import { useMyNotificationStore } from "~/stores/notification";
 definePageMeta({
   title: "学生视频学习管理",
@@ -182,7 +182,7 @@ const router = useRouter();
 
 const notificationStore = useMyNotificationStore();
 
-const videoInfo = ref<VideoInfo[]>([
+const videoInfo = ref<VideosInfo[]>([
   {
     student_id: 0,
     student_name: "",
@@ -196,13 +196,13 @@ const videoInfo = ref<VideoInfo[]>([
   },
 ]);
 
-const selectedVideo = ref<VideoInfo | null>(null);
+const selectedVideo = ref<VideosInfo | null>(null);
 const scoreInput = ref<number | null>(null);
 const scoreError = ref<string | null>(null);
 
 const showScoreDialog = ref(false);
 const isUpdating = ref(false);
-const openScoreDialog = (videoInfo: VideoInfo) => {
+const openScoreDialog = (videoInfo: VideosInfo) => {
   showScoreDialog.value = true;
   selectedVideo.value = videoInfo;
 };
@@ -253,13 +253,16 @@ const formatTime = (seconds: number) => {
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
 const getVideoInfo = async () => {
-  const { VideoInfo } = await $fetch<VideoInfoResponse>(
-    `/api/teacher/${route.params.id}/videoInfo`,
+  const response = await $fetch<VideosInfoResponse>(
+    `http://localhost:5800/api/teacher/${route.params.id}/videos_info`,
     {
       method: "GET",
     }
   );
-  videoInfo.value = VideoInfo;
+  if (response.success) {
+    videoInfo.value = response.videos_info;
+  }
+  
 };
 
 onMounted(() => {

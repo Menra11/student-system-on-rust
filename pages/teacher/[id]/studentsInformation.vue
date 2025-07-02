@@ -49,14 +49,14 @@
 
 <script lang="ts" setup>
 import type {
-  StudentsInformation,
-  StudentsInformationResponse,
+  StudentsInfo,
+  StudentsInfoResponse,
 } from "@/types/teacher/studentsInformation";
 const route = useRoute();
 definePageMeta({
   title: "学生信息",
 });
-const studentsInformation = ref<StudentsInformation[]>([
+const studentsInformation = ref<StudentsInfo[]>([
   {
     student_id: 0,
     student_name: "",
@@ -65,10 +65,12 @@ const studentsInformation = ref<StudentsInformation[]>([
   },
 ]);
 const getStudentsInformation = async () => {
-  const { StudentsInformation } = await $fetch<StudentsInformationResponse>(
-    `/api/teacher/${route.params.id}/studentsInformation`
+  const response = await $fetch<StudentsInfoResponse>(
+    `http://localhost:5800/api/teacher/${route.params.id}/students_info`
   );
-  studentsInformation.value = StudentsInformation;
+  if (response.success) {
+    studentsInformation.value = response.students_info;
+  }
 };
 onMounted(() => {
   getStudentsInformation();

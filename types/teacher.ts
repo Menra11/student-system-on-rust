@@ -8,7 +8,9 @@ export interface Teacher {
   email?: string;
 }
 export interface TeacherResponse {
-  Teacher: Teacher;
+  success: boolean;
+  message: string;
+  teacher?: Teacher;
 }
 export interface TeachersResponse {
   success: boolean;

@@ -7,8 +7,26 @@ export interface Course {
   description: string;
 }
 export interface CoursesResponse {
-  Courses: Course[];
+  success: boolean;
+  message: string;
+  courses: Course[];
 }
 export interface CourseResponse {
-  Course: Course;
+  success: boolean;
+  message: string;
+  course: Course;
+}
+
+export interface CourseInfo {
+  course_id: number;
+  course_name: string;
+  credit: number;
+  classroom: string;
+  schedule: string;
+  description: string;
+}
+export interface CoursesInfoResponse {
+  success: boolean;
+  message: string;
+  courses_info: CourseInfo[];
 }

@@ -17,16 +17,18 @@
             <span class="text-sm text-blue-600 font-medium">{{
               course.schedule
             }}</span>
-            <div class="flex gap-2"><NuxtLink
-              :to="`/teacher/${userStore.user.id}/videoInfo`"
-              class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
-              >查看视频数据</NuxtLink
-            >
-            <NuxtLink
-              :to="`/teacher/${userStore.user.id}/videoManagement`"
-              class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
-              >视频管理</NuxtLink
-            ></div>
+            <div class="flex gap-2">
+              <NuxtLink
+                :to="`/teacher/${userStore.user.id}/videoInfo`"
+                class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
+                >查看视频数据</NuxtLink
+              >
+              <NuxtLink
+                :to="`/teacher/${userStore.user.id}/videoManagement`"
+                class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
+                >视频管理</NuxtLink
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -36,14 +38,14 @@
 
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
-import type { Course,CoursesResponse } from "@/types/teacher/course";
+import type { CourseInfo, CoursesInfoResponse } from "@/types/teacher/course";
 const route = useRoute();
 definePageMeta({
   title: "教授课程信息", // 设置页面标题
 });
 
 const userStore = useMyUserStore();
-const courseData = ref<Course[]>([
+const courseData = ref<CourseInfo[]>([
   {
     course_id: 1,
     course_name: "数据结构",
@@ -54,14 +56,14 @@ const courseData = ref<Course[]>([
   },
 ]);
 onMounted(async () => {
-  const { Courses } = await $fetch<CoursesResponse>(
-    `/api/teacher/${route.params.id}/coursesInfo`,
+  const response = await $fetch<CoursesInfoResponse>(
+    `http://localhost:5800/api/teacher/${route.params.id}/courses_info`,
     {
       method: "GET",
     }
   );
-
-  courseData.value = Courses;
-  console.log(Courses);
+  if (response.success) {
+    courseData.value = response.courses_info;
+  }
 });
 </script>

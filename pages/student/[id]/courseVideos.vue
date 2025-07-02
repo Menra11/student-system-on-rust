@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { useMyUserStore } from "@/stores/user";
-import type { Video } from "@/types/video";
+import type { Video,VideosResponse } from "@/types/video";
 definePageMeta({
   title: "课程视频", // 设置页面标题
 });
@@ -95,9 +95,12 @@ const formatTime = (seconds: number) => {
 };
 
 onMounted(async () => {
-  const res = await $fetch<Video[]>(`/api/student/${route.params.id}/videos`,{
+  const response = await $fetch<VideosResponse>(`http://localhost:5800/api/student/${route.params.id}/videos`,{
     method: "GET",
   });
-  videoData.value = res;
+  if(response.success){
+videoData.value = response.videos;
+  }
+  
 });
 </script>

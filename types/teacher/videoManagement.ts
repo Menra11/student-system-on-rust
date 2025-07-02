@@ -3,7 +3,7 @@ export interface UploadVideoRes {
   message: string;
   filename: string;
 }
-export interface Video {
+export interface CourseVideos {
   video_id: number;
   video_title: string;
   video_description: string;
@@ -11,10 +11,12 @@ export interface Video {
   video_duration: number;
   course_id: number;
 }
-export interface VideoResponse {
-  Videos: Video[];
+export interface CourseVideosResponse {
+  success: boolean;
+  message: string;
+  course_videos: CourseVideos[];
 }
 export interface AddVideoRo{
-  video: Video,
+  video: CourseVideos,
   filename:string
 }
