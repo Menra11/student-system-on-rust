@@ -575,27 +575,37 @@ const saveVideo = async (file: File) => {
   isLoading.value = true;
   const formData = new FormData();
   formData.append("video", file);
-
-  try {
-    const response = await $fetch<UploadVideoRes>(`/api/uploadVideoFile`, {
-      method: "POST",
-      body: formData,
-      params: {
-        video_title: editingVideo.value.video_title,
-      },
-    });
-
-    if (!response.success) {
-      throw new Error("上传失败");
-    }
-    await saveVideoToDatabase(editingVideo.value, response.filename);
-    openEditDialog();
-    setTimeout(() => {
+  const response = await $fetch(`http://localhost:5800/api/video_file`, {
+    method: "POST",
+    body: formData,
+  });
+  console.log(response);
+  openEditDialog();
+  setTimeout(() => {
       isLoading.value = false;
     }, 1000);
-  } catch (error) {
-    console.error("上传出错:", error);
-  }
+  // console.log(formData);
+
+  // try {
+  //   const response = await $fetch<UploadVideoRes>(`/api/uploadVideoFile`, {
+  //     method: "POST",
+  //     body: formData,
+  //     params: {
+  //       video_title: editingVideo.value.video_title,
+  //     },
+  //   });
+
+  //   if (!response.success) {
+  //     throw new Error("上传失败");
+  //   }
+  //   await saveVideoToDatabase(editingVideo.value, response.filename);
+  //   openEditDialog();
+  //   setTimeout(() => {
+  //     isLoading.value = false;
+  //   }, 1000);
+  // } catch (error) {
+  //   console.error("上传出错:", error);
+  // }
 };
 
 const updateVideoList = async () => {
@@ -620,9 +630,9 @@ const updateVideoList = async () => {
     videoForm.value = course_videos_response.course_videos;
   }
 };
-onUpdated(() => {
-  updateVideoList();
-});
+// onUpdated(() => {
+//   updateVideoList();
+// });
 onMounted(() => {
   updateVideoList();
 });
