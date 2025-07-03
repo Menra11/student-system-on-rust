@@ -327,10 +327,11 @@
 
 <script setup lang="ts">
 import type {
-  UploadVideoRes,
+  VideoTitleResponse,
   CourseVideos,
   CourseVideosResponse,
 } from "@/types/teacher/videoManagement";
+import type {PostResponse} from "@/types/post";
 import type { CourseInfo, CoursesInfoResponse } from "@/types/teacher/course";
 import { useMyNotificationStore } from "~/stores/notification";
 const route = useRoute();
@@ -346,12 +347,12 @@ definePageMeta({
 const showEditDialog = ref(false);
 const editDialogLoading = ref(false);
 const editingVideo = ref<CourseVideos | null>({
-  video_id: null,
-  video_title: "",
-  video_description: "",
-  video_url: "",
-  video_duration: null,
-  course_id: null,
+  video_id: 1,
+  video_title: "1",
+  video_description: "1",
+  video_url: "1",
+  video_duration: 1,
+  course_id: 1,
 });
 
 // 上传状态
@@ -371,25 +372,6 @@ const isDeleteDialogOpen = ref(false);
 const isDeleting = ref(false);
 const currentVideoData = ref<{ video_id: number; video_url: string }>(null);
 
-// 状态消息
-const statusMessages = {
-  uploading: {
-    title: "上传中...",
-    message: "您的视频正在上传，请稍候",
-  },
-  success: {
-    title: "上传成功",
-    message: "视频已成功添加到系统",
-  },
-  error: {
-    title: "上传失败",
-    message: "视频上传过程中出现问题",
-  },
-  processing: {
-    title: "处理中...",
-    message: "正在处理视频文件",
-  },
-};
 
 const goBack = () => {
   router.go(-1);
@@ -413,6 +395,7 @@ const openEditDialog = () => {
     uploadedFile.value = null;
     uploadStatus.value = null;
     uploadProgress.value = 0;
+    updateVideoList();
   }, 500);
 };
 
@@ -421,7 +404,6 @@ const removeUploadedFile = () => {
   uploadedFile.value = null;
   uploadStatus.value = null;
   uploadProgress.value = 0;
-
   if (fileInput.value) {
     fileInput.value.value = "";
   }
@@ -513,6 +495,7 @@ const openDeleteDialog = (videoId: number, videoURL: string) => {
 const closeDeleteDialog = () => {
   isDeleteDialogOpen.value = false;
   isDeleting.value = false;
+  updateVideoList();
 };
 
 // 确认删除
@@ -530,13 +513,14 @@ const confirmDelete = async () => {
 // 删除视频
 const delVideo = async (id: number, url: string) => {
   try {
-    await $fetch(`/api/delVideoFile`, {
+    await $fetch(`http://localhost:5800/api/video_file`, {
       method: "DELETE",
-      params: {
-        url,
+      query: {
+        url:url,
       },
     });
-    await $fetch(`/api/teacher/${route.params.id}/${id}`, {
+
+    await $fetch(`http://localhost:5800/api/video/${id}`, {
       method: "DELETE",
     });
     notificationStore.setNotification({
@@ -555,14 +539,16 @@ const saveVideoToDatabase = async (video: CourseVideos, filename: string) => {
   video.course_id = course_id.value;
   video.video_url = filename;
   try {
-    await $fetch(`/api/teacher/${route.params.id}/addVideo`, {
+    const response = await $fetch<PostResponse>(`http://localhost:5800/api/video`, {
       method: "POST",
       body: video,
     });
-    notificationStore.setNotification({
-      message: "上传成功",
-      type: "success",
-    });
+    if (response.success) {
+      notificationStore.setNotification({
+        message: "上传成功",
+        type: "success",
+      });
+    }
   } catch (error) {
     notificationStore.setNotification({
       message: error.message,
@@ -575,37 +561,24 @@ const saveVideo = async (file: File) => {
   isLoading.value = true;
   const formData = new FormData();
   formData.append("video", file);
-  const response = await $fetch(`http://localhost:5800/api/video_file`, {
-    method: "POST",
-    body: formData,
-  });
-  console.log(response);
-  openEditDialog();
+  const response = await $fetch<VideoTitleResponse>(
+    `http://localhost:5800/api/video_file`,
+    {
+      method: "POST",
+      body: formData,
+      query: {
+        title: editingVideo.value.video_title,
+      },
+    }
+  );
+  if (response.success) {
+    openEditDialog();
+    await saveVideoToDatabase(editingVideo.value, response.file_name);
+  }
+
   setTimeout(() => {
-      isLoading.value = false;
-    }, 1000);
-  // console.log(formData);
-
-  // try {
-  //   const response = await $fetch<UploadVideoRes>(`/api/uploadVideoFile`, {
-  //     method: "POST",
-  //     body: formData,
-  //     params: {
-  //       video_title: editingVideo.value.video_title,
-  //     },
-  //   });
-
-  //   if (!response.success) {
-  //     throw new Error("上传失败");
-  //   }
-  //   await saveVideoToDatabase(editingVideo.value, response.filename);
-  //   openEditDialog();
-  //   setTimeout(() => {
-  //     isLoading.value = false;
-  //   }, 1000);
-  // } catch (error) {
-  //   console.error("上传出错:", error);
-  // }
+    isLoading.value = false;
+  }, 1000);
 };
 
 const updateVideoList = async () => {
@@ -630,9 +603,7 @@ const updateVideoList = async () => {
     videoForm.value = course_videos_response.course_videos;
   }
 };
-// onUpdated(() => {
-//   updateVideoList();
-// });
+
 onMounted(() => {
   updateVideoList();
 });

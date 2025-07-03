@@ -219,10 +219,12 @@ const submitScore = async () => {
     return;
   }
   const res = await $fetch(
-    `/api/teacher/${route.params.id}/videoInfo/${selectedVideo.value?.course_id}/${selectedVideo.value?.student_id}/score`,
+    `http://localhost:5800/api/teacher/${route.params.id}`,
     {
       method: "POST",
       body: {
+        student_id:selectedVideo.value?.student_id,
+        course_id:selectedVideo.value?.course_id,
         score: scoreInput.value,
       },
     }

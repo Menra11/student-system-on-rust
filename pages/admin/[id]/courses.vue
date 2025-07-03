@@ -34,9 +34,6 @@
                 学分
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
-                教授教师
-              </th>
-              <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
                 课室
               </th>
               <th class="px-3 py-4 text-sm whitespace-nowrap text-blue-700">
@@ -68,9 +65,6 @@
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ course.credit }}
-              </td>
-              <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
-                {{course.teacher_name }}
               </td>
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-800">
                 {{ course.classroom }}
@@ -114,9 +108,8 @@ import { useMyNotificationStore } from "@/stores/notification";
 
 import type {
   Course,
-  CourseResponse,
   CoursesResponse,
-} from "~/types/admin/course";
+} from "~/types/course";
 
 const route = useRoute();
 
@@ -140,13 +133,17 @@ const searchQuery = ref("");
 // const isDeleteDialogOpen = ref(false);
 // const currentCourse = ref<Course>();
 
-// 获取课程数据
+// 获取所有课程
 const fetchCourses = async () => {
-  const { Courses } = await $fetch<CoursesResponse>("/api/admin/courses", {
-    method: "GET",
-  });
-  if (Courses) {
-    courses.value = Courses;
+  const response = await $fetch<CoursesResponse>(
+    "http://127.0.0.1:5800/api/courses",
+    {
+      method: "GET",
+    }
+  );
+  if (response.success) {
+    courses.value = response.courses;
+    
   }
 };
 // 过滤后的课程数据
@@ -159,8 +156,7 @@ const filteredcourses = computed(() => {
       (c) =>
         c.course_name.toLowerCase().includes(query) ||
         c.course_id.toString().includes(query) ||
-        (c.credit.toString() && c.credit.toString().includes(query)) ||
-        c.teacher_name.toLowerCase().includes(query)
+        (c.credit.toString() && c.credit.toString().includes(query)) 
     );
   }
   return result;
@@ -185,6 +181,7 @@ const refreshData = () => {
 // const closeEditDialog = () => {
 //   isEditDialogOpen.value = false;
 //   isUpdating.value = false;
+// fetchCourses()
 // };
 
 // // 更新课程信息
@@ -235,6 +232,7 @@ const refreshData = () => {
 // const closeDeleteDialog = () => {
 //   isDeleteDialogOpen.value = false;
 //   isDeleting.value = false;
+// fetchCourses()
 // };
 
 // // 确认删除
@@ -284,9 +282,9 @@ const refreshData = () => {
 // };
 
 
-onUpdated(() => {
-  fetchCourses();
-});
+
+  
+
 
 // 初始化
 onMounted(() => {

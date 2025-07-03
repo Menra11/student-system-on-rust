@@ -20,3 +20,10 @@ export interface AddVideoRo{
   video: CourseVideos,
   filename:string
 }
+
+export interface VideoTitleResponse { 
+  success: boolean;
+  message: string;
+  file_name?: string;
+}
+

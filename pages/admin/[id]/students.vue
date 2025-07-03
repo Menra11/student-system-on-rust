@@ -617,6 +617,7 @@ const openEditDialog = (student: Student) => {
 const closeEditDialog = () => {
   isEditDialogOpen.value = false;
   isUpdating.value = false;
+   fetchStudents();
 };
 
 // 更新学生信息
@@ -667,6 +668,7 @@ const openDeleteDialog = (student: Student) => {
 const closeDeleteDialog = () => {
   isDeleteDialogOpen.value = false;
   isDeleting.value = false;
+   fetchStudents();
 };
 
 // 确认删除
@@ -714,10 +716,6 @@ const confirmDelete = async () => {
     isDeleting.value = false;
   }
 };
-
-onUpdated(() => {
-  fetchStudents();
-});
 
 // 初始化
 onMounted(() => {

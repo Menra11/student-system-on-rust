@@ -84,13 +84,13 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString('zh-CN')
 }
 
-// 获取教师信息
 const fetchTeacher = async () => {
-  const { Teacher } = await $fetch<TeacherResponse>(`/api/teacher/${route.params.teacherInfo}`,{
-    method: 'GET'
-  })
-  if (Teacher) {
-    teacher.value = Teacher[0]
+  const response = await $fetch<TeacherResponse>(`http://localhost:5800/api/teacher/${route.params.teacherInfo}`,{
+    method: "GET",
+  });
+  
+  if (response.success) {
+    teacher.value = response.teacher;
   }
 }
 onMounted(() => {

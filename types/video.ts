@@ -4,9 +4,10 @@ export interface Video {
   video_description: string;
   video_url: string;
   video_duration: number;
-  teacher_name: string;
+  teacher_name?: string;
   course_name: string;
   completed?: boolean;
+  course_id?: number;
 }
 
 export interface Progress {
@@ -16,8 +17,6 @@ export interface Progress {
   progress: number;
   completed: boolean;
 }
-
-
 
 export interface VideoResponse {
   success: boolean;
@@ -32,3 +31,4 @@ export interface VideosResponse {
   videos?: Video[];
   progresses?: Progress[];
 }
+

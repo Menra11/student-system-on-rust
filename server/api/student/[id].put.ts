@@ -1,4 +1,3 @@
-import { Body } from "#components";
 import pool from "@/server/api/db";
 import type { StudentResponse } from "@/types/student";
 

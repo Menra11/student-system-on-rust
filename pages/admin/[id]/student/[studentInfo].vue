@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Student,Score,StudentGet } from "~/types/student";
+import type { Student,Score,StudentRes,ScoreRes } from "~/types/student";
 const route = useRoute()
 const router = useRouter()
 definePageMeta({
@@ -121,19 +121,34 @@ const formatDate = (dateString: string) => {
 }
 
 // 获取学生数据
-// 获取学生成绩
 const fetchStudent = async () => {
-  const { Student,Scores } = await $fetch<StudentGet>(`/api/student/${route.params.studentInfo}`,{
-    method: 'GET'
-  })
-  if (student && scores) {
-    student.value = Student[0]
-    scores.value = Scores
+  const student_response = await $fetch<StudentRes>(
+    `http://localhost:5800/api/student/${route.params.id}`,
+    {
+      method: "GET",
+    }
+  );
+  if (student_response.success) {
+    student.value = student_response.student;
   }
-}
+};
+// 获取学生成绩
+const fetchScores = async () => {
+  const score_response = await $fetch<ScoreRes>(
+    `http://localhost:5800/api/student/${route.params.id}/scores`,
+    {
+      method: "GET",
+    }
+  );
+  if (score_response.success) {
+    scores.value = score_response.scores;
+  }
+};
+
 onMounted(() => {
-  fetchStudent()
-})
+  fetchStudent();
+  fetchScores();
+});
 </script>
 
 <style>

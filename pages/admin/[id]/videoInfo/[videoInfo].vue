@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Video, VideoResponse, VideosResponse } from "~/types/admin/video";
+import type { Video, VideoResponse, VideosResponse } from "~/types/video";
 const route = useRoute();
 const router = useRouter();
 definePageMeta({
@@ -117,14 +117,14 @@ const formatTime = (seconds: number) => {
 
 // 获取视频信息
 const fetchVideo = async () => {
-  const { Video } = await $fetch<VideoResponse>(
-    `/api/admin/videoInfo/${route.params.videoInfo}`,
+  const response = await $fetch<VideoResponse>(
+    `http://localhost:5800/api/video/${route.params.videoInfo}`,
     {
       method: "GET",
     }
   );
-  if (Video) {
-    video.value = Video[0];
+  if (response.success) {
+    video.value = response.video;
   }
 };
 onMounted(() => {

@@ -140,13 +140,16 @@ const searchQuery = ref("");
 // const isDeleteDialogOpen = ref(false);
 // const currentTeacher = ref<Teacher>();
 
-// 获取教师数据
+// 获取所有教师
 const fetchTeachers = async () => {
-  const { Teachers } = await $fetch<TeachersResponse>("/api/admin/teachers", {
-    method: "GET",
-  });
-  if (Teachers) {
-    teachers.value = Teachers;
+  const response = await $fetch<TeachersResponse>(
+    "http://127.0.0.1:5800/api/teachers",
+    {
+      method: "GET",
+    }
+  );
+  if (response.success) {
+    teachers.value = response.teachers;
   }
 };
 // 过滤后的教师数据
@@ -194,6 +197,7 @@ const refreshData = () => {
 // const closeEditDialog = () => {
 //   isEditDialogOpen.value = false;
 //   isUpdating.value = false;
+// fetchTeachers();
 // };
 
 // // 更新教师信息
@@ -244,6 +248,7 @@ const refreshData = () => {
 // const closeDeleteDialog = () => {
 //   isDeleteDialogOpen.value = false;
 //   isDeleting.value = false;
+// fetchTeachers();
 // };
 
 // // 确认删除
@@ -293,9 +298,6 @@ const refreshData = () => {
 // };
 
 
-onUpdated(() => {
-  fetchTeachers();
-});
 
 // 初始化
 onMounted(() => {

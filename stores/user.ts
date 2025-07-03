@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { StudentGet } from "~/types/student";
+import type { StudentRes,ScoreRes } from "~/types/student";
 import type { TeacherResponse } from "~/types/teacher";
 import type { AdminResponse } from "~/types/admin/admin";
 
@@ -32,24 +32,39 @@ export const useMyUserStore = defineStore("myUserStore", {
     },
     async getUser(id: number, user: string) {
       if (user === "student") {
-        const { Student, Scores } = await $fetch<StudentGet>(
-          `/api/student/${id}`,
-          {
-            method: "GET",
-          }
-        );
-        
-        this.user.name = Student[0].student_name;
-        this.user.selectedCourses = Scores.map(score => score.course_name);
-        
+        // 获取学生数据
+
+  const student_response = await $fetch<StudentRes>(
+    `http://localhost:5800/api/student/${id}`,
+    {
+      method: "GET",
+    }
+  );
+  
+
+// 获取学生成绩
+
+  const score_response = await $fetch<ScoreRes>(
+    `http://localhost:5800/api/student/${id}/scores`,
+    {
+      method: "GET",
+    }
+  );
+  if (student_response.success) {
+    this.user.name = student_response.student.student_name;
+  }
+  if (score_response.success) {
+    this.user.selectedCourses = score_response.scores.map(score => score.course_name);
+  }
       } else if (user === "teacher") {
-        const { Teacher } = await $fetch<TeacherResponse>(
-          `/api/teacher/${id}`,
-          {
-            method: "GET",
-          }
-        );
-        this.user.name = Teacher[0].teacher_name;
+        const response = await $fetch<TeacherResponse>(`http://localhost:5800/api/teacher/${id}`,{
+    method: "GET",
+  });
+  
+  if (response.success) {
+    this.user.name = response.teacher.teacher_name;
+  }
+        
       } else if (user === "admin") {
         const { Admin } = await $fetch<AdminResponse>(
           `/api/admin/${id}`,
