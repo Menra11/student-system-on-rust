@@ -21,14 +21,18 @@ export interface Pagination {
 }
 
 export interface StudentsResponse {
-  Students: Student[];
+  success: boolean;
+  message: string;
+  students: Student[];
 }
 export interface StudentResponse {
   Student: Student;
 }
 
-export interface ClassResponse {
-  Classes: Class[];
+export interface ClassesResponse {
+  success: boolean;
+  message: string;
+  classes: Class[];
 }
 
 // [id]

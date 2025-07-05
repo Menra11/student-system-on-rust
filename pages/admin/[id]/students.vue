@@ -450,7 +450,7 @@ import type {
   Class,
   Pagination,
   StudentsResponse,
-  ClassResponse,
+  ClassesResponse,
 } from "~/types/student";
 
 const route = useRoute();
@@ -489,21 +489,21 @@ const currentStudent = ref<Student>();
 
 // 获取班级数据
 const fetchClasses = async () => {
-  const { Classes } = await $fetch<ClassResponse>("/api/admin/classes", {
+  const response = await $fetch<ClassesResponse>("http://localhost:5800/api/classes", {
     method: "get",
   });
-  if (Classes) {
-    classes.value = Classes;
+  if (response.success) {
+    classes.value = response.classes;
   }
 };
 
 // 获取学生数据
 const fetchStudents = async () => {
-  const { Students } = await $fetch<StudentsResponse>("/api/admin/students", {
+  const response = await $fetch<StudentsResponse>("http://localhost:5800/api/students", {
     method: "GET",
   });
-  if (Students) {
-    students.value = Students;
+  if (response.success) {
+    students.value = response.students;
     pagination.value = {
       total: students.value.length,
       total_pages: Math.ceil(students.value.length / limit.value),
