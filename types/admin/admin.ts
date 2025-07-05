@@ -3,5 +3,7 @@ export interface Admin{
   admin_name: string;
 }
 export interface AdminResponse {
-  Admin: Admin;
+  success: boolean;
+  message: string;
+  admin: Admin;
 }

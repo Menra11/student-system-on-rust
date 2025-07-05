@@ -31,11 +31,11 @@ const admin = ref<Admin>({
 })
 
 const fetchAdmin = async () => {
-  const { Admin } = await $fetch<AdminResponse>(`/api/admin/${route.params.id}`,{
+  const response = await $fetch<AdminResponse>(`http://localhost:5800/api/admin/${route.params.id}`,{
     method: 'GET'
   })
-  if (Admin) {
-    admin.value = Admin
+  if (response.success) {
+    admin.value = response.admin
   }
 }
 onMounted(() => {

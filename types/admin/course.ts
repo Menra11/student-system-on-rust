@@ -21,6 +21,8 @@ export interface CourseResponse {
   Course: Course;
 }
 export interface CourseInfoResponse { 
-  Course: Course;
-  Videos: Video[];
+  success: boolean;
+  message: string;
+  course: Course;
+  videos: Video[];
 }

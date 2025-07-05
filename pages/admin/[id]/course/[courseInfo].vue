@@ -134,15 +134,15 @@ const formatTime = (seconds: number) => {
 
 // 获取课程信息
 const fetchCourse = async () => {
-  const { Course, Videos } = await $fetch<CourseInfoResponse>(
-    `/api/admin/course/${route.params.courseInfo}`,
+  const response = await $fetch<CourseInfoResponse>(
+    `http://localhost:5800/api/course/${route.params.courseInfo}`,
     {
       method: "GET",
     }
   );
-  if (Course && Videos) {
-    course.value = Course[0];
-    videos.value = Videos;
+  if (response.success) {
+    course.value = response.course;
+    videos.value = response.videos;
   }
 };
 onMounted(() => {

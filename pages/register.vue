@@ -329,7 +329,7 @@
 
 <script lang="ts" setup>
 import type { RegisterData, RegisterResponse } from "@/types/register";
-import type { Class, ClassResponse } from "~/types/student";
+import type { Class, ClassesResponse } from "~/types/student";
 import { useMyNotificationStore } from "@/stores/notification";
 
 const route = useRoute();
@@ -354,12 +354,16 @@ const errorMessage = ref("");
 
 const classes = ref<Class[]>([]);
 
+// 获取班级数据
 const fetchClasses = async () => {
-  const { Classes } = await $fetch<ClassResponse>("/api/admin/classes", {
-    method: "get",
-  });
-  if (Classes) {
-    classes.value = Classes;
+  const response = await $fetch<ClassesResponse>(
+    "http://localhost:5800/api/classes",
+    {
+      method: "get",
+    }
+  );
+  if (response.success) {
+    classes.value = response.classes;
   }
 };
 
@@ -373,10 +377,15 @@ const handleSubmit = async () => {
 
   try {
     isLoading.value = true;
-    const response = await $fetch<RegisterResponse>("http://localhost:5800/api/register", {
-      method: "POST",
-      body: { user_from: registerData },
-    });
+    const response = await $fetch<RegisterResponse>(
+      "http://localhost:5800/api/register",
+      {
+        method: "POST",
+        body: { user_from: registerData },
+      }
+    );
+    console.log(response);
+    
     if (response.success) {
       notificationStore.setNotification({
         message: "注册成功",
