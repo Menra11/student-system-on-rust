@@ -467,7 +467,7 @@ const openEditDialog = () => {
     uploadStatus.value = null;
     uploadProgress.value = 0;
     fetchVideos();
-  }, 500);
+  }, 800);
 };
 // 删除上传的文件
 const removeUploadedFile = () => {
@@ -542,7 +542,7 @@ const handleUpload = async (file: File) => {
         if (!editingVideo.value.video_title) {
           editingVideo.value.video_title = file.name.replace(/\.[^/.]+$/, "");
         }
-      }, 500);
+      }, 800);
     }
   }, 200);
 };
@@ -593,7 +593,7 @@ const saveVideo = async (file: File) => {
 
   setTimeout(() => {
     isLoading.value = false;
-  }, 1000);
+  }, 800);
 };
 
 // 格式化时间 (秒 -> 分:秒)

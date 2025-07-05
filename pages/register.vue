@@ -395,7 +395,7 @@ const handleSubmit = async () => {
       setTimeout(() => {
         isLoading.value = false;
         router.push("/login");
-      }, 1500);
+      }, 800);
     } else {
       errorMessage.value = response.message;
     }

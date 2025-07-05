@@ -93,7 +93,7 @@ const loadVideo = () => {
     console.log(video.value.video_url);
     
     isLoading.value = false;
-  }, 1000);
+  }, 800);
 };
 watch(
   () => route.params.videoInfo,

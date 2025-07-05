@@ -17,4 +17,15 @@ export default defineNuxtConfig({
   typescript: {
     strict: false,
   },
+  features: {
+    // 预取视口内的链接
+    inlineStyles: false
+  },
+
+  vue: {
+    compilerOptions: {
+      // 开启 Vue 级别的优化
+      whitespace: 'condense'
+    }
+  }
 });

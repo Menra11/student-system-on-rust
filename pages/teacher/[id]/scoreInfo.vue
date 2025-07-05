@@ -216,7 +216,7 @@ const submitScore = async () => {
     isUpdating.value = false;
     getScoreInfo();
     closeScoreDialog();
-  }, 1000);
+  }, 800);
 };
 const goBack = () => {
   router.go(-1);

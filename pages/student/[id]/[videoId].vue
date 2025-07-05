@@ -280,7 +280,7 @@ const loadVideo = () => {
   setTimeout(() => {
     videoSource.value = `/_nuxt/assets/videos/${videoData.value.video_url}`;
     isLoading.value = false;
-  }, 1000);
+  }, 800);
 };
 watch(
   () => route.params.videoId,

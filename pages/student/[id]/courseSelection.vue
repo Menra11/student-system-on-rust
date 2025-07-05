@@ -395,7 +395,7 @@ const submitSelection = async () => {
       }
     );
     if (response.success) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 800));
       notificationStore.setNotification({
         message: "选课成功",
         type: "success",
