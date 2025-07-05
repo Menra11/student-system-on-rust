@@ -19,9 +19,9 @@
             }}</span>
             <div class="flex gap-2">
               <NuxtLink
-                :to="`/teacher/${userStore.user.id}/videoInfo`"
+                :to="`/teacher/${userStore.user.id}/scoreInfo`"
                 class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded cursor-pointer hover:bg-blue-200 hover:text-blue-900"
-                >查看视频数据</NuxtLink
+                >成绩管理</NuxtLink
               >
               <NuxtLink
                 :to="`/teacher/${userStore.user.id}/videoManagement`"

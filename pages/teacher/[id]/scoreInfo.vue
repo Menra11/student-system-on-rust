@@ -18,9 +18,6 @@
               <th class="px-2 py-2 text-sm text-blue-700">学生 ID</th>
               <th class="px-2 py-2 text-sm text-blue-700">学生姓名</th>
               <th class="px-2 py-2 text-sm text-blue-700">课程名</th>
-              <th class="px-2 py-2 text-sm text-blue-700">视频标题</th>
-              <th class="px-2 py-2 text-sm text-blue-700">视频时长</th>
-              <th class="px-2 py-2 text-sm text-blue-700">完成进度</th>
               <th class="px-2 py-2 text-sm text-blue-700">成绩</th>
               <th class="px-2 py-2 text-sm text-blue-700">操作</th>
             </tr>
@@ -31,7 +28,7 @@
             valign="middle"
           >
             <tr
-              v-for="(video, index) in videoInfo"
+              v-for="(video, index) in scoreInfo"
               :key="index"
               class="hover:bg-blue-50 transition-colors"
             >
@@ -43,27 +40,6 @@
               </td>
               <td class="px-2 py-2 text-sm text-gray-700 max-w-xs">
                 {{ video.course_name }}
-              </td>
-              <td class="px-2 py-2 text-sm text-gray-700 font-medium">
-                {{ video.video_title }}
-              </td>
-              <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-700">
-                {{ formatTime(video.video_duration) }}
-              </td>
-              <td class="px-2 py-2">
-                <div class="flex items-center">
-                  <div
-                    class="w-24 bg-gray-200 rounded-full h-2 mr-2 text-start"
-                  >
-                    <div
-                      class="bg-blue-600 h-2 rounded-full"
-                      :style="{ width: Math.round(video.progress * 100) + '%' }"
-                    ></div>
-                  </div>
-                  <span class="text-sm text-gray-700"
-                    >{{ Math.round(video.progress * 100) }}%</span
-                  >
-                </div>
               </td>
               <td class="px-2 py-2 whitespace-nowrap">
                 <span
@@ -92,7 +68,7 @@
         </table>
       </div>
       <!-- 无数据提示 -->
-      <div v-if="videoInfo.length === 0" class="text-center py-12">
+      <div v-if="scoreInfo.length === 0" class="text-center py-12">
         <div class="text-gray-500">
           <i class="fas fa-video-slash text-4xl mb-4"></i>
           <p class="text-xl">暂无学生视频学习数据</p>
@@ -172,39 +148,35 @@
 </template>
 
 <script lang="ts" setup>
-import type { VideosInfo, VideosInfoResponse } from "@/types/teacher/videoInfo";
+import type { ScoreInfo, ScoresInfoResponse } from "@/types/teacher/scoreInfo";
 import { useMyNotificationStore } from "~/stores/notification";
 definePageMeta({
-  title: "学生视频学习管理",
+  title: "学生成绩管理",
 });
 const route = useRoute();
 const router = useRouter();
 
 const notificationStore = useMyNotificationStore();
 
-const videoInfo = ref<VideosInfo[]>([
+const scoreInfo = ref<ScoreInfo[]>([
   {
     student_id: 0,
     student_name: "",
     course_id: 0,
     course_name: "",
-    video_title: "",
-    video_duration: 616,
-    progress: 0,
-    completed: false,
     score: 0,
   },
 ]);
 
-const selectedVideo = ref<VideosInfo | null>(null);
+const selectedVideo = ref<ScoreInfo | null>(null);
 const scoreInput = ref<number | null>(null);
 const scoreError = ref<string | null>(null);
 
 const showScoreDialog = ref(false);
 const isUpdating = ref(false);
-const openScoreDialog = (videoInfo: VideosInfo) => {
+const openScoreDialog = (scoreInfo: ScoreInfo) => {
   showScoreDialog.value = true;
-  selectedVideo.value = videoInfo;
+  selectedVideo.value = scoreInfo;
 };
 
 const closeScoreDialog = () => {
@@ -242,7 +214,7 @@ const submitScore = async () => {
   }
   setTimeout(() => {
     isUpdating.value = false;
-    getVideoInfo();
+    getScoreInfo();
     closeScoreDialog();
   }, 1000);
 };
@@ -254,21 +226,21 @@ const formatTime = (seconds: number) => {
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
-const getVideoInfo = async () => {
-  const response = await $fetch<VideosInfoResponse>(
-    `http://localhost:5800/api/teacher/${route.params.id}/videos_info`,
+const getScoreInfo = async () => {
+  const response = await $fetch<ScoresInfoResponse>(
+    `http://localhost:5800/api/teacher/${route.params.id}/scores_info`,
     {
       method: "GET",
     }
   );
   if (response.success) {
-    videoInfo.value = response.videos_info;
+    scoreInfo.value = response.scores_info;
   }
   
 };
 
 onMounted(() => {
-  getVideoInfo();
+  getScoreInfo();
 });
 </script>
 
