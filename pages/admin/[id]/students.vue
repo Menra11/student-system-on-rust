@@ -451,6 +451,7 @@ import type {
   Pagination,
   StudentsResponse,
   ClassesResponse,
+  StudentResponse
 } from "~/types/student";
 
 const route = useRoute();
@@ -626,11 +627,11 @@ const updateStudent = async () => {
 
   try {
     // 发送更新请求
-    const response = await $fetch(
-      `/api/student/${currentStudent.value.student_id}`,
+    const response = await $fetch<StudentResponse>(
+      `http://localhost:5800/api/student/${currentStudent.value.student_id}`,
       {
         method: "PUT",
-        body: { Student: currentStudent.value },
+        body: currentStudent.value,
       }
     );
     console.log(response);
@@ -677,8 +678,8 @@ const confirmDelete = async () => {
 
   try {
     // 发送删除请求
-    const response = await $fetch(
-      `/api/student/${currentStudent.value.student_id}`,
+    const response = await $fetch<StudentResponse>(
+      `http://localhost:5800/api/student/${currentStudent.value.student_id}`,
       {
         method: "DELETE",
       }

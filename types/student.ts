@@ -23,16 +23,18 @@ export interface Pagination {
 export interface StudentsResponse {
   success: boolean;
   message: string;
-  students: Student[];
+  students?: Student[];
 }
 export interface StudentResponse {
-  Student: Student;
+  success: boolean;
+  message: string;
+  student?: Student;
 }
 
 export interface ClassesResponse {
   success: boolean;
   message: string;
-  classes: Class[];
+  classes?: Class[];
 }
 
 // [id]

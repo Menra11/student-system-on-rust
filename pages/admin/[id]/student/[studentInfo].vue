@@ -123,7 +123,7 @@ const formatDate = (dateString: string) => {
 // 获取学生数据
 const fetchStudent = async () => {
   const student_response = await $fetch<StudentRes>(
-    `http://localhost:5800/api/student/${route.params.id}`,
+    `http://localhost:5800/api/student/${route.params.studentInfo}`,
     {
       method: "GET",
     }
@@ -135,7 +135,7 @@ const fetchStudent = async () => {
 // 获取学生成绩
 const fetchScores = async () => {
   const score_response = await $fetch<ScoreRes>(
-    `http://localhost:5800/api/student/${route.params.id}/scores`,
+    `http://localhost:5800/api/student/${route.params.studentInfo}/scores`,
     {
       method: "GET",
     }
