@@ -131,13 +131,13 @@
               @click="submitScore()"
               class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
-            <span v-if="isUpdating" class="flex items-center">
-                  <font-awesome-icon
-                    :icon="['fas', 'spinner']"
-                    class="animate-spin mr-2"
-                  />
-                  保存中...
-                </span>
+              <span v-if="isUpdating" class="flex items-center">
+                <font-awesome-icon
+                  :icon="['fas', 'spinner']"
+                  class="animate-spin mr-2"
+                />
+                保存中...
+              </span>
               <span v-else>提交</span>
             </button>
           </div>
@@ -182,21 +182,26 @@ const openScoreDialog = (scoreInfo: ScoreInfo) => {
 const closeScoreDialog = () => {
   showScoreDialog.value = false;
   selectedVideo.value = null;
+  scoreInput.value = null;
 };
 
 const submitScore = async () => {
-  isUpdating.value = true;
   if (!scoreInput.value) {
     scoreError.value = "请输入分数";
     return;
   }
+  if (scoreInput.value > 100 || scoreInput.value < 0) {
+    scoreError.value = "请输入正确范围内的分数";
+    return;
+  }
+  isUpdating.value = true;
   const res = await $fetch(
     `http://localhost:5800/api/teacher/${route.params.id}`,
     {
       method: "POST",
       body: {
-        student_id:selectedVideo.value?.student_id,
-        course_id:selectedVideo.value?.course_id,
+        student_id: selectedVideo.value?.student_id,
+        course_id: selectedVideo.value?.course_id,
         score: scoreInput.value,
       },
     }
@@ -236,7 +241,6 @@ const getScoreInfo = async () => {
   if (response.success) {
     scoreInfo.value = response.scores_info;
   }
-  
 };
 
 onMounted(() => {
